@@ -1,1 +1,224 @@
 
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#087f8c">
+  <meta name="description" content="CAMBIO: conversor de monedas para nuestra comunidad latinoamericana.">
+  <title>CAMBIO | Conversor de monedas</title>
+  <style>
+    :root {
+      font-family: system-ui, Arial, sans-serif;
+      color: #15333c;
+      background: #f2f8f8;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; }
+    header {
+      background: linear-gradient(135deg, #075e68, #0c929b);
+      color: white;
+      padding: 28px 20px 42px;
+    }
+    .brand {
+      max-width: 520px;
+      margin: auto;
+      display: flex;
+      align-items: center;
+      gap: 13px;
+    }
+    .logo {
+      border: 2px solid white;
+      border-radius: 14px;
+      padding: 12px;
+      font-weight: 900;
+      font-size: 20px;
+    }
+    h1 { margin: 0; font-size: 27px; letter-spacing: 2px; }
+    .tagline { font-size: 13px; opacity: .9; }
+    main { max-width: 520px; margin: -20px auto 0; padding: 0 15px 28px; }
+    .card {
+      background: white;
+      padding: 23px;
+      border-radius: 22px;
+      border: 1px solid #dce8e9;
+      box-shadow: 0 10px 30px #15333c0c;
+    }
+    h2 { font-size: 22px; margin: 0 0 6px; }
+    .intro { color: #637780; font-size: 14px; line-height: 1.5; margin-bottom: 22px; }
+    label { display: block; font-size: 13px; font-weight: 700; margin-bottom: 7px; }
+    .field { margin-bottom: 17px; }
+    input, select {
+      width: 100%;
+      padding: 13px 11px;
+      border: 1px solid #cbdcde;
+      border-radius: 11px;
+      background: white;
+      color: #15333c;
+      font: inherit;
+      min-height: 48px;
+    }
+    input:focus, select:focus { outline: 2px solid #8bd3d4; }
+    #amount { font-size: 23px; font-weight: 750; }
+    .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .swap-row { text-align: center; margin: -3px 0 12px; }
+    #swap {
+      width: 43px; height: 43px; border-radius: 50%;
+      border: 1px solid #cbdcde; background: #eaf7f6;
+      color: #087f8c; font-size: 23px; cursor: pointer;
+    }
+    .result {
+      background: #eaf7f6; border: 1px solid #cdebe8;
+      border-radius: 15px; padding: 17px; margin: 6px 0 19px;
+    }
+    .result-label { font-size: 12px; font-weight: 750; color: #42676b; }
+    #result { font-size: 29px; font-weight: 850; overflow-wrap: anywhere; margin-top: 5px; }
+    .help, .note { color: #637780; font-size: 12px; line-height: 1.55; }
+    .note { margin: 17px 0 0; }
+    footer { text-align: center; padding: 20px; color: #637780; font-size: 12px; }
+    @media (max-width: 360px) {
+      .pair { grid-template-columns: 1fr; gap: 0; }
+      .card { padding: 17px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand">
+      <div class="logo">CA</div>
+      <div>
+        <h1>CAMBIO</h1>
+        <div class="tagline">Tus monedas, más simples.</div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="card">
+      <h2>Conversor de monedas</h2>
+      <p class="intro">Calculá cuánto vale tu dinero en otra moneda, de forma simple y rápida.</p>
+
+      <div class="field">
+        <label for="amount">¿Cuánto querés convertir?</label>
+        <input id="amount" type="number" min="0" step="any" value="10000" inputmode="decimal">
+      </div>
+
+      <div class="pair">
+        <div class="field">
+          <label for="from">Tengo</label>
+          <select id="from">
+            <option value="ARS" selected>🇦🇷 Peso argentino</option>
+            <option value="BOB">🇧🇴 Boliviano</option>
+            <option value="USD">🇺🇸 Dólar estadounidense</option>
+            <option value="PEN">🇵🇪 Sol peruano</option>
+            <option value="PYG">🇵🇾 Guaraní paraguayo</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="to">Quiero recibir</label>
+          <select id="to">
+            <option value="ARS">🇦🇷 Peso argentino</option>
+            <option value="BOB" selected>🇧🇴 Boliviano</option>
+            <option value="USD">🇺🇸 Dólar estadounidense</option>
+            <option value="PEN">🇵🇪 Sol peruano</option>
+            <option value="PYG">🇵🇾 Guaraní paraguayo</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="swap-row">
+        <button id="swap" type="button" aria-label="Intercambiar monedas">⇅</button>
+      </div>
+
+      <div class="result" aria-live="polite">
+        <div class="result-label">RESULTADO ESTIMADO</div>
+        <div id="result">Ingresá una cotización</div>
+      </div>
+
+      <div class="field">
+        <label id="rateLabel" for="rate">Cotización</label>
+        <input id="rate" type="number" min="0" step="any" placeholder="Ingresá la cotización" inputmode="decimal">
+        <p class="help" id="rateHelp">Ingresá cuántos bolivianos recibís por cada peso argentino.</p>
+      </div>
+
+      <p class="note">
+        Esta versión utiliza cotizaciones ingresadas manualmente.
+        El resultado no incluye comisiones ni gastos de transferencia.
+      </p>
+    </section>
+  </main>
+
+  <footer>CAMBIO · Una herramienta para nuestra comunidad.</footer>
+
+  <script>
+    const amount = document.getElementById("amount");
+    const from = document.getElementById("from");
+    const to = document.getElementById("to");
+    const rate = document.getElementById("rate");
+    const result = document.getElementById("result");
+    const rateLabel = document.getElementById("rateLabel");
+    const rateHelp = document.getElementById("rateHelp");
+
+    const currencies = {
+      ARS: "pesos argentinos",
+      BOB: "bolivianos",
+      USD: "dólares estadounidenses",
+      PEN: "soles peruanos",
+      PYG: "guaraníes paraguayos"
+    };
+
+    function money(value, currency) {
+      try {
+        return new Intl.NumberFormat("es-AR", {
+          style: "currency",
+          currency,
+          maximumFractionDigits: 2
+        }).format(value);
+      } catch {
+        return value.toLocaleString("es-AR") + " " + currency;
+      }
+    }
+
+    function update() {
+      rateLabel.textContent = "Cotización: 1 " + from.value + " = ? " + to.value;
+      rateHelp.textContent =
+        "Ingresá cuántos " + currencies[to.value] +
+        " recibís por cada " + currencies[from.value] + ".";
+
+      const a = Number(amount.value);
+      const r = Number(rate.value);
+
+      if (from.value === to.value) {
+        result.textContent = amount.value !== "" && a >= 0
+          ? money(a, to.value)
+          : "Ingresá un monto";
+        return;
+      }
+
+      if (amount.value === "" || rate.value === "" ||
+          !Number.isFinite(a) || !Number.isFinite(r) || a < 0 || r <= 0) {
+        result.textContent = "Ingresá la cotización";
+        return;
+      }
+
+      result.textContent = money(a * r, to.value);
+    }
+
+    [amount, from, to, rate].forEach(element => {
+      element.addEventListener("input", update);
+      element.addEventListener("change", update);
+    });
+
+    document.getElementById("swap").addEventListener("click", () => {
+      const previous = from.value;
+      from.value = to.value;
+      to.value = previous;
+      rate.value = "";
+      update();
+    });
+
+    update();
+  </script>
+</body>
+  </html>
+  
