@@ -1,224 +1,750 @@
 
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#087f8c">
-  <meta name="description" content="CAMBIO: conversor de monedas para nuestra comunidad latinoamericana.">
-  <title>CAMBIO | Conversor de monedas</title>
+  <title>CAMBIO</title>
   <style>
     :root {
-      font-family: system-ui, Arial, sans-serif;
-      color: #15333c;
-      background: #f2f8f8;
+      --crema: #F5EBD5;
+      --crema2: #EFE4C9;
+      --verde: #17452F;
+      --verde2: #28583E;
+      --amarillo: #E5C64F;
+      --texto: #20352A;
+      --suave: #58675B;
+      --linea: #D8CCB1;
+      --blanco: #FFFFFF;
+      --whatsapp: #25A65A;
     }
+
     * { box-sizing: border-box; }
-    body { margin: 0; }
-    header {
-      background: linear-gradient(135deg, #075e68, #0c929b);
-      color: white;
-      padding: 28px 20px 42px;
+
+    body {
+      margin: 0;
+      background: #E8E5DC;
+      color: var(--texto);
+      font-family: Arial, Helvetica, sans-serif;
     }
-    .brand {
-      max-width: 520px;
+
+    button, input { font: inherit; }
+    button { cursor: pointer; }
+
+    .app {
+      width: min(100%, 520px);
+      min-height: 100vh;
       margin: auto;
+      padding: 18px 16px 24px;
+      background: var(--crema);
+    }
+
+    .oculto { display: none !important; }
+
+    .encabezado {
       display: flex;
       align-items: center;
-      gap: 13px;
+      gap: 12px;
+      margin-bottom: 18px;
     }
-    .logo {
-      border: 2px solid white;
-      border-radius: 14px;
-      padding: 12px;
-      font-weight: 900;
-      font-size: 20px;
+
+    .billetera {
+      display: grid;
+      place-items: center;
+      width: 52px;
+      height: 52px;
+      flex-shrink: 0;
+      border-radius: 15px;
+      background: var(--amarillo);
+      color: var(--verde);
+      font-size: 27px;
     }
-    h1 { margin: 0; font-size: 27px; letter-spacing: 2px; }
-    .tagline { font-size: 13px; opacity: .9; }
-    main { max-width: 520px; margin: -20px auto 0; padding: 0 15px 28px; }
-    .card {
+
+    .marca {
+      color: var(--verde);
+      font-size: 23px;
+      font-weight: 850;
+    }
+
+    .subtitulo {
+      margin-top: 4px;
+      color: var(--suave);
+      font-size: 12px;
+    }
+
+    .boton-icono {
+      display: grid;
+      place-items: center;
+      width: 44px;
+      height: 44px;
+      margin-left: auto;
+      border: 0;
+      border-radius: 50%;
+      background: var(--verde);
+      color: white;
+      font-size: 24px;
+    }
+
+    h1, h2, h3, p { margin-top: 0; }
+    h1 { margin-bottom: 7px; color: var(--verde); font-size: 22px; }
+    h2 { margin-bottom: 6px; color: var(--verde); font-size: 19px; }
+    h3 { margin-bottom: 4px; color: var(--verde); font-size: 16px; }
+    p { line-height: 1.45; }
+
+    .suave { color: var(--suave); font-size: 13px; }
+
+    .hero {
+      margin-bottom: 15px;
+      padding: 17px 16px;
+      border-radius: 18px;
+      background: var(--crema2);
+    }
+
+    .etiqueta {
+      display: block;
+      margin-bottom: 7px;
+      color: var(--verde);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .monedas {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin: 12px 0 16px;
+    }
+
+    .moneda {
+      position: relative;
+      padding: 10px 6px;
+      border: 1px solid var(--linea);
+      border-radius: 12px;
       background: white;
-      padding: 23px;
-      border-radius: 22px;
-      border: 1px solid #dce8e9;
-      box-shadow: 0 10px 30px #15333c0c;
+      font-size: 27px;
     }
-    h2 { font-size: 22px; margin: 0 0 6px; }
-    .intro { color: #637780; font-size: 14px; line-height: 1.5; margin-bottom: 22px; }
-    label { display: block; font-size: 13px; font-weight: 700; margin-bottom: 7px; }
-    .field { margin-bottom: 17px; }
-    input, select {
+
+    .moneda.activa {
+      border-color: var(--verde);
+      background: var(--verde);
+      box-shadow: inset 0 0 0 2px var(--amarillo);
+    }
+
+    .moneda.activa::after {
+      position: absolute;
+      top: 5px;
+      right: 7px;
+      color: var(--amarillo);
+      content: "✓";
+      font-size: 12px;
+    }
+
+    .importe {
       width: 100%;
-      padding: 13px 11px;
-      border: 1px solid #cbdcde;
+      padding: 14px 13px;
+      border: 1px solid var(--linea);
+      border-radius: 12px;
+      background: white;
+      color: var(--verde);
+      font-size: 22px;
+      font-weight: 750;
+    }
+
+    .aclaracion {
+      margin-top: 6px;
+      color: var(--suave);
+      font-size: 12px;
+    }
+
+    .calcular {
+      display: flex;
+      width: 100%;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin: 14px 0 18px;
+      padding: 17px;
+      border: 0;
+      border-radius: 13px;
+      background: var(--verde);
+      color: white;
+      font-size: 16px;
+      font-weight: 850;
+    }
+
+    .titulo-seccion {
+      margin: 2px 0 10px;
+      color: var(--verde);
+      font-size: 18px;
+      font-weight: 800;
+    }
+
+    .cotizaciones {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .cotizacion {
+      min-width: 0;
+      padding: 12px;
+      border: 1px solid #E3D9C4;
+      border-radius: 14px;
+      background: white;
+    }
+
+    .cotizacion-nombre {
+      margin-bottom: 6px;
+      color: var(--verde);
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .cotizacion-tipo {
+      min-height: 30px;
+      color: var(--suave);
+      font-size: 12px;
+    }
+
+    .cotizacion-valor {
+      margin: 6px 0;
+      color: var(--verde);
+      font-size: 21px;
+      font-weight: 850;
+    }
+
+    .actualizado {
+      color: var(--suave);
+      font-size: 11px;
+      line-height: 1.45;
+    }
+
+    .fuente {
+      margin-top: 5px;
+      color: #8A7650;
+      font-size: 10px;
+    }
+
+    .informacion {
+      display: flex;
+      gap: 9px;
+      align-items: flex-start;
+      margin-top: 14px;
+      padding: 12px;
+      border: 1px solid #E3D9C4;
+      border-radius: 13px;
+      background: white;
+    }
+
+    .informacion h3 { margin-bottom: 4px; font-size: 14px; }
+    .informacion p { margin-bottom: 0; color: var(--suave); font-size: 12px; }
+
+    .publicidad-inicio, .publicidad-directorio {
+      margin-top: 14px;
+      padding: 16px;
+      border-radius: 16px;
+      background: var(--verde);
+      color: white;
+    }
+
+    .publicidad-inicio p, .publicidad-directorio p {
+      margin-bottom: 0;
+      color: #E9E6D8;
+      font-size: 13px;
+    }
+
+    .llamado {
+      display: block;
+      margin-top: 11px;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      color: var(--amarillo);
+      font-weight: 850;
+      text-align: left;
+    }
+
+    .boton-secundario {
+      width: 100%;
+      margin-top: 12px;
+      padding: 11px 13px;
+      border: 1px solid var(--verde);
       border-radius: 11px;
       background: white;
-      color: #15333c;
-      font: inherit;
-      min-height: 48px;
+      color: var(--verde);
+      font-weight: 750;
     }
-    input:focus, select:focus { outline: 2px solid #8bd3d4; }
-    #amount { font-size: 23px; font-weight: 750; }
-    .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-    .swap-row { text-align: center; margin: -3px 0 12px; }
-    #swap {
-      width: 43px; height: 43px; border-radius: 50%;
-      border: 1px solid #cbdcde; background: #eaf7f6;
-      color: #087f8c; font-size: 23px; cursor: pointer;
+
+    .hero-directorio {
+      margin-bottom: 18px;
+      padding: 18px;
+      border-radius: 17px;
+      background: var(--verde);
+      color: white;
     }
-    .result {
-      background: #eaf7f6; border: 1px solid #cdebe8;
-      border-radius: 15px; padding: 17px; margin: 6px 0 19px;
+
+    .hero-directorio h1 { color: white; }
+    .hero-directorio p { margin-bottom: 0; color: #E9E6D8; font-size: 14px; }
+
+    .lista-negocios {
+      display: grid;
+      gap: 10px;
+      margin-bottom: 19px;
     }
-    .result-label { font-size: 12px; font-weight: 750; color: #42676b; }
-    #result { font-size: 29px; font-weight: 850; overflow-wrap: anywhere; margin-top: 5px; }
-    .help, .note { color: #637780; font-size: 12px; line-height: 1.55; }
-    .note { margin: 17px 0 0; }
-    footer { text-align: center; padding: 20px; color: #637780; font-size: 12px; }
-    @media (max-width: 360px) {
-      .pair { grid-template-columns: 1fr; gap: 0; }
-      .card { padding: 17px; }
+
+    .negocio {
+      display: flex;
+      width: 100%;
+      align-items: center;
+      gap: 12px;
+      padding: 12px;
+      border: 1px solid #E3D9C4;
+      border-radius: 15px;
+      background: white;
+      text-align: left;
+    }
+
+    .miniatura {
+      display: grid;
+      width: 72px;
+      height: 72px;
+      flex-shrink: 0;
+      place-items: center;
+      border-radius: 11px;
+      background: #E8E4D8;
+      color: var(--verde);
+      font-size: 30px;
+    }
+
+    .descripcion-negocio {
+      margin-top: 4px;
+      color: var(--suave);
+      font-size: 12px;
+      line-height: 1.35;
+    }
+
+    .flecha {
+      margin-left: auto;
+      color: var(--verde);
+      font-size: 23px;
+    }
+
+    .servicios {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .servicio {
+      display: flex;
+      min-height: 99px;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 13px 9px;
+      border: 1px solid #E3D9C4;
+      border-radius: 14px;
+      background: white;
+      color: var(--verde);
+      font-size: 13px;
+      font-weight: 750;
+      text-align: center;
+    }
+
+    .servicio.activo {
+      border-color: var(--verde);
+      background: var(--verde);
+      color: white;
+    }
+
+    .resultado-servicio {
+      margin: -6px 0 18px;
+      padding: 12px;
+      border-radius: 12px;
+      background: white;
+      color: var(--suave);
+      font-size: 13px;
+    }
+
+    .publicidad-directorio h2 { color: white; }
+
+    .boton-amarillo {
+      width: 100%;
+      margin-top: 13px;
+      padding: 13px;
+      border: 0;
+      border-radius: 11px;
+      background: var(--amarillo);
+      color: var(--verde);
+      font-weight: 850;
+    }
+
+    .detalle-publicidad {
+      margin-top: 12px;
+      padding: 12px;
+      border-radius: 11px;
+      background: var(--verde2);
+      color: white;
+      font-size: 13px;
+    }
+
+    .ficha {
+      padding: 14px;
+      border: 1px solid #E3D9C4;
+      border-radius: 16px;
+      background: white;
+    }
+
+    .nombre-ficha {
+      margin-bottom: 4px;
+      color: var(--verde);
+      font-size: 24px;
+      font-weight: 850;
+    }
+
+    .fotos {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      margin: 12px 0;
+    }
+
+    .foto {
+      display: grid;
+      min-height: 110px;
+      aspect-ratio: 4 / 3;
+      place-items: center;
+      overflow: hidden;
+      border-radius: 10px;
+      background: #E8E4D8;
+      color: var(--suave);
+      text-align: center;
+      font-size: 12px;
+    }
+
+    .foto img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .texto-ficha {
+      margin: 9px 0 12px;
+      color: var(--verde);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .separador { border: 0; border-top: 1px solid var(--linea); }
+
+    .contacto {
+      display: flex;
+      align-items: flex-start;
+      gap: 11px;
+      padding: 10px 0;
+    }
+
+    .contacto-icono {
+      width: 28px;
+      flex-shrink: 0;
+      font-size: 23px;
+      text-align: center;
+    }
+
+    .contacto-titulo {
+      margin-bottom: 3px;
+      color: var(--verde);
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .contacto-detalle { color: var(--suave); font-size: 12px; }
+
+    .enlace {
+      color: #28734A;
+      font-size: 13px;
+      font-weight: 700;
+      text-decoration: underline;
+    }
+
+    .nota {
+      margin-top: 10px;
+      color: #8A7650;
+      font-size: 10px;
+    }
+
+    .pie {
+      margin-top: 17px;
+      color: #7B806F;
+      font-size: 11px;
+      text-align: center;
+    }
+
+    @media (min-width: 560px) {
+      body { padding: 20px 0; }
+      .app {
+        min-height: calc(100vh - 40px);
+        border-radius: 22px;
+      }
     }
   </style>
 </head>
 <body>
-  <header>
-    <div class="brand">
-      <div class="logo">CA</div>
+<main class="app">
+
+  <!-- MAQUETA 1: PANTALLA PRINCIPAL -->
+  <section id="inicio">
+    <header class="encabezado">
+      <div class="billetera" aria-hidden="true">▱</div>
       <div>
-        <h1>CAMBIO</h1>
-        <div class="tagline">Tus monedas, más simples.</div>
+        <div class="marca">CAMBIO</div>
+        <div class="subtitulo">Tu dinero más fácil</div>
+      </div>
+    </header>
+
+    <div class="hero">
+      <h1>Calculá tu platita</h1>
+      <p class="suave">Convertí tus pesos a tu moneda nacional.</p>
+    </div>
+
+    <label class="etiqueta">¿A qué moneda querés convertir?</label>
+    <div class="monedas">
+      <button class="moneda activa" data-moneda="BOB" aria-label="Bolivianos">🇧🇴</button>
+      <button class="moneda" data-moneda="PEN" aria-label="Soles peruanos">🇵🇪</button>
+      <button class="moneda" data-moneda="PYG" aria-label="Guaraníes paraguayos">🇵🇾</button>
+    </div>
+
+    <label class="etiqueta" for="importe">¿Cuántos pesos querés cambiar?</label>
+    <input id="importe" class="importe" type="number" min="0" value="10000">
+    <div class="aclaracion">Pesos argentinos (ARS)</div>
+
+    <button class="calcular" id="calcular">
+      <span aria-hidden="true">▦</span> CALCULAR
+    </button>
+
+    <div id="avisoCalculo" class="informacion oculto" aria-live="polite">
+      <div>ℹ️</div>
+      <div>
+        <h3>Conversión pendiente de conexión</h3>
+        <p>La cotización automática todavía no está conectada. Esta maqueta no calcula un importe real.</p>
       </div>
     </div>
-  </header>
 
-  <main>
-    <section class="card">
-      <h2>Conversor de monedas</h2>
-      <p class="intro">Calculá cuánto vale tu dinero en otra moneda, de forma simple y rápida.</p>
+    <div class="titulo-seccion">Cotizaciones de referencia</div>
+    <div class="cotizaciones">
+      <article class="cotizacion">
+        <div class="cotizacion-nombre">🇦🇷 Argentina</div>
+        <div class="cotizacion-tipo">Dólar blue</div>
+        <div class="cotizacion-valor">$1.540</div>
+        <div class="actualizado">Actualizado:<br>12 OCT/26</div>
+        <div class="fuente">elCotizador · ejemplo</div>
+      </article>
+      <article class="cotizacion">
+        <div class="cotizacion-nombre">🇧🇴 Bolivia</div>
+        <div class="cotizacion-tipo">Dólar paralelo</div>
+        <div class="cotizacion-valor">Bs 11,85</div>
+        <div class="actualizado">Actualizado:<br>12 OCT/26</div>
+        <div class="fuente">Blue Bolivia · ejemplo</div>
+      </article>
+      <article class="cotizacion">
+        <div class="cotizacion-nombre">🇵🇪 Perú</div>
+        <div class="cotizacion-tipo">Dólar / sol</div>
+        <div class="cotizacion-valor">S/ 3,42</div>
+        <div class="actualizado">Actualizado:<br>12 OCT/26</div>
+        <div class="fuente">Cuánto está · ejemplo</div>
+      </article>
+      <article class="cotizacion">
+        <div class="cotizacion-nombre">🇵🇾 Paraguay</div>
+        <div class="cotizacion-tipo">Dólar / guaraní</div>
+        <div class="cotizacion-valor">₲ 7.200</div>
+        <div class="actualizado">Actualizado:<br>12 OCT/26</div>
+        <div class="fuente">BCP · ejemplo</div>
+      </article>
+    </div>
 
-      <div class="field">
-        <label for="amount">¿Cuánto querés convertir?</label>
-        <input id="amount" type="number" min="0" step="any" value="10000" inputmode="decimal">
+    <div class="informacion">
+      <div>💡</div>
+      <div>
+        <h3>Información transparente</h3>
+        <p>CAMBIO utiliza cotizaciones del mercado, incluido el dólar blue o paralelo. Los valores pueden diferir del tipo de cambio oficial.</p>
       </div>
+    </div>
 
-      <div class="pair">
-        <div class="field">
-          <label for="from">Tengo</label>
-          <select id="from">
-            <option value="ARS" selected>🇦🇷 Peso argentino</option>
-            <option value="BOB">🇧🇴 Boliviano</option>
-            <option value="USD">🇺🇸 Dólar estadounidense</option>
-            <option value="PEN">🇵🇪 Sol peruano</option>
-            <option value="PYG">🇵🇾 Guaraní paraguayo</option>
-          </select>
+    <div class="publicidad-inicio">
+      <strong>Publicidad de tiendas y comercios textiles</strong>
+      <p>Encontrá servicios de nuestra comunidad.</p>
+      <button class="llamado" id="irNegocios">¡Publicitá tu negocio con CAMBIO! →</button>
+      <p style="margin-top:8px">Dale visibilidad a tu comercio y conectá con nuestra comunidad.</p>
+    </div>
+
+    <button class="boton-secundario" id="abrirDirectorio">
+      Ver negocios textiles de la comunidad
+    </button>
+    <div class="pie">CAMBIO · Maqueta interactiva · Cotizaciones ilustrativas</div>
+  </section>
+
+  <!-- MAQUETA 2: DIRECTORIO TEXTIL -->
+  <section id="directorio" class="oculto">
+    <header class="encabezado">
+      <div class="billetera" aria-hidden="true">▱</div>
+      <div>
+        <div class="marca">CAMBIO</div>
+        <div class="subtitulo">Negocios de nuestra comunidad</div>
+      </div>
+      <button class="boton-icono" id="volverInicio" aria-label="Volver al inicio" title="Volver al inicio">⌂</button>
+    </header>
+
+    <div class="hero-directorio">
+      <h1>Negocios destacados</h1>
+      <p>Emprendimientos textiles de Villa Celina y alrededores.</p>
+    </div>
+
+    <div class="titulo-seccion">Comercios destacados</div>
+    <div class="lista-negocios">
+      <button class="negocio" data-ficha="juan">
+        <div class="miniatura">▤</div>
+        <div>
+          <h3>Textil Juan</h3>
+          <div class="descripcion-negocio">Venta de telas por kilo y precios mayoristas.</div>
         </div>
-        <div class="field">
-          <label for="to">Quiero recibir</label>
-          <select id="to">
-            <option value="ARS">🇦🇷 Peso argentino</option>
-            <option value="BOB" selected>🇧🇴 Boliviano</option>
-            <option value="USD">🇺🇸 Dólar estadounidense</option>
-            <option value="PEN">🇵🇪 Sol peruano</option>
-            <option value="PYG">🇵🇾 Guaraní paraguayo</option>
-          </select>
+        <span class="flecha">›</span>
+      </button>
+
+      <button class="negocio" data-ficha="chisla">
+        <div class="miniatura">✂</div>
+        <div>
+          <h3>Bordados Chisla</h3>
+          <div class="descripcion-negocio">Bordados personalizados.</div>
         </div>
+        <span class="flecha">›</span>
+      </button>
+
+      <button class="negocio" data-ficha="andy">
+        <div class="miniatura">▧</div>
+        <div>
+          <h3>Sublimados Andy</h3>
+          <div class="descripcion-negocio">Sublimación y personalización.</div>
+        </div>
+        <span class="flecha">›</span>
+      </button>
+    </div>
+
+    <div class="titulo-seccion">Buscá un servicio</div>
+    <p class="suave">Elegí el trabajo textil que necesitás.</p>
+
+    <div class="servicios">
+      <button class="servicio" data-servicio="Bordados"><span>✂</span>Bordados</button>
+      <button class="servicio" data-servicio="Taller de costura"><span>♧</span>Taller de costura</button>
+      <button class="servicio" data-servicio="Sublimación"><span>▧</span>Sublimación</button>
+      <button class="servicio" data-servicio="Etiquetas"><span>▱</span>Etiquetas</button>
+      <button class="servicio" data-servicio="Plotter y vinilo"><span>▤</span>Plotter y vinilo</button>
+      <button class="servicio" data-servicio="Planchado textil"><span>▣</span>Planchado textil</button>
+    </div>
+
+    <div id="resultadoServicio" class="resultado-servicio oculto" aria-live="polite"></div>
+
+    <div class="publicidad-directorio">
+      <h2>¿Tenés un emprendimiento?</h2>
+      <p>Dale visibilidad a tu negocio y conectá con nuestra comunidad.</p>
+      <button class="boton-amarillo" id="mostrarPublicidad">¡Publicitá tu negocio!</button>
+      <div id="detallePublicidad" class="detalle-publicidad oculto">
+        En una próxima etapa, podrás enviar los datos de tu comercio para solicitar su publicación en CAMBIO.
       </div>
+    </div>
 
-      <div class="swap-row">
-        <button id="swap" type="button" aria-label="Intercambiar monedas">⇅</button>
+    <div class="pie">CAMBIO · Directorio textil · Villa Celina</div>
+  </section>
+
+  <!-- FICHAS DE LOS COMERCIOS -->
+  <section id="ficha" class="oculto">
+    <header class="encabezado">
+      <button class="boton-icono" id="volverDirectorio" aria-label="Volver a los negocios" title="Volver al directorio" style="margin-left:0">←</button>
+      <div>
+        <div class="marca">CAMBIO</div>
+        <div class="subtitulo">Ficha del comercio</div>
       </div>
+    </header>
 
-      <div class="result" aria-live="polite">
-        <div class="result-label">RESULTADO ESTIMADO</div>
-        <div id="result">Ingresá una cotización</div>
-      </div>
+    <article class="ficha" id="contenidoFicha"></article>
+    <div class="pie">CAMBIO · Ficha de ejemplo</div>
+  </section>
 
-      <div class="field">
-        <label id="rateLabel" for="rate">Cotización</label>
-        <input id="rate" type="number" min="0" step="any" placeholder="Ingresá la cotización" inputmode="decimal">
-        <p class="help" id="rateHelp">Ingresá cuántos bolivianos recibís por cada peso argentino.</p>
-      </div>
+</main>
 
-      <p class="note">
-        Esta versión utiliza cotizaciones ingresadas manualmente.
-        El resultado no incluye comisiones ni gastos de transferencia.
-      </p>
-    </section>
-  </main>
+<script>
+  const pantallas = {
+    inicio: document.getElementById("inicio"),
+    directorio: document.getElementById("directorio"),
+    ficha: document.getElementById("ficha")
+  };
 
-  <footer>CAMBIO · Una herramienta para nuestra comunidad.</footer>
-
-  <script>
-    const amount = document.getElementById("amount");
-    const from = document.getElementById("from");
-    const to = document.getElementById("to");
-    const rate = document.getElementById("rate");
-    const result = document.getElementById("result");
-    const rateLabel = document.getElementById("rateLabel");
-    const rateHelp = document.getElementById("rateHelp");
-
-    const currencies = {
-      ARS: "pesos argentinos",
-      BOB: "bolivianos",
-      USD: "dólares estadounidenses",
-      PEN: "soles peruanos",
-      PYG: "guaraníes paraguayos"
-    };
-
-    function money(value, currency) {
-      try {
-        return new Intl.NumberFormat("es-AR", {
-          style: "currency",
-          currency,
-          maximumFractionDigits: 2
-        }).format(value);
-      } catch {
-        return value.toLocaleString("es-AR") + " " + currency;
-      }
-    }
-
-    function update() {
-      rateLabel.textContent = "Cotización: 1 " + from.value + " = ? " + to.value;
-      rateHelp.textContent =
-        "Ingresá cuántos " + currencies[to.value] +
-        " recibís por cada " + currencies[from.value] + ".";
-
-      const a = Number(amount.value);
-      const r = Number(rate.value);
-
-      if (from.value === to.value) {
-        result.textContent = amount.value !== "" && a >= 0
-          ? money(a, to.value)
-          : "Ingresá un monto";
-        return;
-      }
-
-      if (amount.value === "" || rate.value === "" ||
-          !Number.isFinite(a) || !Number.isFinite(r) || a < 0 || r <= 0) {
-        result.textContent = "Ingresá la cotización";
-        return;
-      }
-
-      result.textContent = money(a * r, to.value);
-    }
-
-    [amount, from, to, rate].forEach(element => {
-      element.addEventListener("input", update);
-      element.addEventListener("change", update);
+  function mostrarPantalla(nombre) {
+    Object.entries(pantallas).forEach(([clave, elemento]) => {
+      elemento.classList.toggle("oculto", clave !== nombre);
     });
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
 
-    document.getElementById("swap").addEventListener("click", () => {
-      const previous = from.value;
-      from.value = to.value;
-      to.value = previous;
-      rate.value = "";
-      update();
+  document.getElementById("abrirDirectorio").addEventListener("click", () => {
+    mostrarPantalla("directorio");
+  });
+
+  document.getElementById("irNegocios").addEventListener("click", () => {
+    mostrarPantalla("directorio");
+  });
+
+  document.getElementById("volverInicio").addEventListener("click", () => {
+    mostrarPantalla("inicio");
+  });
+
+  document.getElementById("volverDirectorio").addEventListener("click", () => {
+    mostrarPantalla("directorio");
+  });
+
+  // Selector visual de moneda. Todavía no calcula conversiones reales.
+  document.querySelectorAll("[data-moneda]").forEach(boton => {
+    boton.addEventListener("click", () => {
+      document.querySelectorAll("[data-moneda]").forEach(item => {
+        item.classList.remove("activa");
+      });
+      boton.classList.add("activa");
     });
+  });
 
-    update();
-  </script>
-</body>
-  </html>
-  
+  document.getElementById("calcular").addEventListener("click", () => {
+    document.getElementById("avisoCalculo").classList.remove("oculto");
+  });
+
+  const datosFichas = {
+    juan: {
+      nombre: "Textil Juan",
+      descripcion: "Venta de telas por kilo y precios mayoristas.",
+      fotos: [
+        "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=600&q=80",
+        "https://images.unsplash.com/photo-1528459801416-a9e53bbf4e17?auto=format&fit=crop&w=600&q=80"
+      ],
+      texto: "Algunas telas disponibles: W15, W18, dry fit y otros tipos de tela. Consultá por colores y stock.",
+      telefono: "WhatsApp del comercio",
+      ubicacion: "Ubicación de la tienda en Villa Celina"
+    },
+    chisla: {
+      nombre: "Bordados Chisla",
+      descripcion: "Bordados personalizados.",
+      fotos: [
+        "https://images.unsplash.com/photo-1452860606245-08befc0ff44b?auto=format&fit=crop&w=600&q=80",
+        "https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=600&q=80"
+      ],
+      texto: "Bordados de nombres, escudos y diseños personalizados. Consultá por trabajos y disponibilidad.",
+      telefono: "WhatsApp del comercio",
+      ubicacion: "Ubicación del taller en Villa Celina"
+    },
+    andy: {
+      nombre: "Sublimados Andy",
+      descripcion: "Sublimación y personalización.",
+      fotos: [
+        "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=600&q=80",
+        "https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?auto=format&fit=crop&w=600&q=80"
+      ],
+      texto: "Estampados y prendas personalizadas. Consult
