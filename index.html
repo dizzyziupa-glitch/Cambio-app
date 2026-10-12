@@ -1,265 +1,350 @@
 
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CAMBIO | Tu dinero más fácil</title>
+<style>
+:root {
+  --crema:#F5EBD5; --crema2:#EFE4C9; --verde:#17452F;
+  --verde2:#28583E; --amarillo:#E5C64F; --texto:#20352A;
+  --suave:#58675B; --linea:#D8CCB1; --blanco:#fff;
+}
+*{box-sizing:border-box}
+body{margin:0;background:#E8E5DC;color:var(--texto);font-family:Arial,Helvetica,sans-serif}
+button,input{font:inherit}
+button{cursor:pointer}
+.app{width:min(100%,520px);min-height:100vh;margin:auto;padding:18px 16px 24px;background:var(--crema)}
+.oculto{display:none!important}
+.encabezado{display:flex;align-items:center;gap:12px;margin-bottom:18px}
+.billetera{display:grid;place-items:center;width:52px;height:52px;flex-shrink:0;border-radius:15px;background:var(--amarillo);color:var(--verde);font-size:27px}
+.marca{color:var(--verde);font-size:23px;font-weight:850}
+.subtitulo{margin-top:4px;color:var(--suave);font-size:12px}
+.boton-icono{display:grid;place-items:center;width:44px;height:44px;margin-left:auto;border:0;border-radius:50%;background:var(--verde);color:white;font-size:24px}
+h1,h2,h3,p{margin-top:0}
+h1{margin-bottom:7px;color:var(--verde);font-size:22px}
+h2{margin-bottom:6px;color:var(--verde);font-size:19px}
+h3{margin-bottom:4px;color:var(--verde);font-size:16px}
+p{line-height:1.45}
+.suave{color:var(--suave);font-size:13px}
+.hero{margin-bottom:15px;padding:17px 16px;border-radius:18px;background:var(--crema2)}
+.etiqueta{display:block;margin-bottom:7px;color:var(--verde);font-size:13px;font-weight:700}
+.monedas{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0 16px}
+.moneda{position:relative;padding:10px 6px;border:1px solid var(--linea);border-radius:12px;background:white;font-size:27px}
+.moneda.activa{border-color:var(--verde);background:var(--verde);box-shadow:inset 0 0 0 2px var(--amarillo)}
+.moneda.activa::after{position:absolute;top:5px;right:7px;color:var(--amarillo);content:"✓";font-size:12px}
+.importe{width:100%;padding:14px 13px;border:1px solid var(--linea);border-radius:12px;background:white;color:var(--verde);font-size:22px;font-weight:750}
+.aclaracion{margin-top:6px;color:var(--suave);font-size:12px}
+.calcular{display:flex;width:100%;align-items:center;justify-content:center;gap:10px;margin:14px 0 18px;padding:17px;border:0;border-radius:13px;background:var(--verde);color:white;font-size:16px;font-weight:850}
+.titulo-seccion{margin:12px 0 10px;color:var(--verde);font-size:18px;font-weight:800}
+.cotizaciones{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.cotizacion{min-width:0;padding:12px;border:1px solid #E3D9C4;border-radius:14px;background:white}
+.cotizacion-nombre{margin-bottom:6px;color:var(--verde);font-size:13px;font-weight:800}
+.cotizacion-tipo{min-height:30px;color:var(--suave);font-size:12px}
+.cotizacion-valor{margin:6px 0;color:var(--verde);font-size:21px;font-weight:850}
+.actualizado{color:var(--suave);font-size:11px;line-height:1.45}
+.fuente{margin-top:5px;color:#8A7650;font-size:10px}
+.informacion{display:flex;gap:9px;align-items:flex-start;margin-top:14px;padding:12px;border:1px solid #E3D9C4;border-radius:13px;background:white}
+.informacion h3{margin-bottom:4px;font-size:14px}
+.informacion p{margin-bottom:0;color:var(--suave);font-size:12px}
+.publicidad-inicio,.publicidad-directorio{margin-top:14px;padding:16px;border-radius:16px;background:var(--verde);color:white}
+.publicidad-inicio p,.publicidad-directorio p{margin-bottom:0;color:#E9E6D8;font-size:13px}
+.llamado{display:block;margin-top:11px;padding:0;border:0;background:transparent;color:var(--amarillo);font-weight:850;text-align:left}
+.boton-secundario{width:100%;margin-top:12px;padding:13px;border:1px solid var(--verde);border-radius:11px;background:white;color:var(--verde);font-weight:750}
+.hero-directorio{margin-bottom:18px;padding:18px;border-radius:17px;background:var(--verde);color:white}
+.hero-directorio h1{color:white}
+.hero-directorio p{margin-bottom:0;color:#E9E6D8;font-size:14px}
+.lista-negocios{display:grid;gap:10px;margin-bottom:19px}
+.negocio{display:flex;width:100%;align-items:center;gap:12px;padding:12px;border:1px solid #E3D9C4;border-radius:15px;background:white;text-align:left}
+.miniatura{display:grid;width:72px;height:72px;flex-shrink:0;place-items:center;border-radius:11px;background:#E8E4D8;color:var(--verde);font-size:30px}
+.descripcion-negocio{margin-top:4px;color:var(--suave);font-size:12px;line-height:1.35}
+.flecha{margin-left:auto;color:var(--verde);font-size:23px}
+.servicios{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:18px}
+.servicio{display:flex;min-height:90px;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:13px 9px;border:1px solid #E3D9C4;border-radius:14px;background:white;color:var(--verde);font-size:13px;font-weight:750;text-align:center}
+.servicio.activo{border-color:var(--verde);background:var(--verde);color:white}
+.resultado-servicio{margin:-6px 0 18px;padding:12px;border-radius:12px;background:white;color:var(--suave);font-size:13px}
+.publicidad-directorio h2{color:white}
+.boton-amarillo{width:100%;margin-top:13px;padding:13px;border:0;border-radius:11px;background:var(--amarillo);color:var(--verde);font-weight:850}
+.detalle-publicidad{margin-top:12px;padding:12px;border-radius:11px;background:var(--verde2);color:white;font-size:13px}
+.ficha{padding:14px;border:1px solid #E3D9C4;border-radius:16px;background:white}
+.nombre-ficha{margin-bottom:4px;color:var(--verde);font-size:24px;font-weight:850}
+.fotos{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:12px 0}
+.foto{display:grid;min-height:110px;aspect-ratio:4/3;place-items:center;overflow:hidden;border-radius:10px;background:#E8E4D8;color:var(--suave);text-align:center;font-size:12px}
+.foto img{width:100%;height:100%;object-fit:cover}
+.texto-ficha{margin:9px 0 12px;color:var(--verde);font-size:13px;line-height:1.45}
+.separador{border:0;border-top:1px solid var(--linea)}
+.contacto{display:flex;align-items:flex-start;gap:11px;padding:10px 0}
+.contacto-icono{width:28px;flex-shrink:0;font-size:23px;text-align:center}
+.contacto-titulo{margin-bottom:3px;color:var(--verde);font-size:13px;font-weight:800}
+.contacto-detalle{color:var(--suave);font-size:12px}
+.nota{margin-top:10px;color:#8A7650;font-size:10px}
+.pie{margin-top:17px;color:#7B806F;font-size:11px;text-align:center}
+@media(min-width:560px){body{padding:20px 0}.app{min-height:calc(100vh - 40px);border-radius:22px}}
+</style>
+</head>
+<body>
+<main class="app">
+
+<section id="inicio">
+  <header class="encabezado">
+    <div class="billetera" aria-hidden="true">▱</div>
+    <div><div class="marca">CAMBIO</div><div class="subtitulo">Tu dinero más fácil</div></div>
+  </header>
+
+  <div class="hero">
+    <h1>Calculá tu platita</h1>
+    <p class="suave">Convertí tus pesos a tu moneda nacional.</p>
+  </div>
+
+  <label class="etiqueta">Elegí tu moneda</label>
+  <div class="monedas">
+    <button type="button" class="moneda activa" data-moneda="BOB" aria-label="Bolivianos" aria-pressed="true">🇧🇴</button>
+    <button type="button" class="moneda" data-moneda="PEN" aria-label="Soles peruanos" aria-pressed="false">🇵🇪</button>
+    <button type="button" class="moneda" data-moneda="PYG" aria-label="Guaraníes paraguayos" aria-pressed="false">🇵🇾</button>
+  </div>
+
+  <label class="etiqueta" for="importe">¿Cuántos pesos querés cambiar?</label>
+  <input id="importe" class="importe" type="number" min="1" step="any" value="10000">
+  <div class="aclaracion">Pesos argentinos (ARS)</div>
+  <button type="button" class="calcular" id="calcular">▦ &nbsp; CALCULAR</button>
+
+  <div id="avisoCalculo" class="informacion oculto" aria-live="polite"></div>
+
+  <div class="titulo-seccion">Cotizaciones de referencia</div>
+  <div class="cotizaciones">
+    <article class="cotizacion"><div class="cotizacion-nombre">🇦🇷 Argentina</div><div class="cotizacion-tipo">Dólar blue</div><div class="cotizacion-valor">$1.540</div><div class="actualizado">Valor de ejemplo</div><div class="fuente">Cotización ilustrativa</div></article>
+    <article class="cotizacion"><div class="cotizacion-nombre">🇧🇴 Bolivia</div><div class="cotizacion-tipo">Dólar paralelo</div><div class="cotizacion-valor">Bs 11,85</div><div class="actualizado">Valor de ejemplo</div><div class="fuente">Cotización ilustrativa</div></article>
+    <article class="cotizacion"><div class="cotizacion-nombre">🇵🇪 Perú</div><div class="cotizacion-tipo">Dólar / sol</div><div class="cotizacion-valor">S/ 3,42</div><div class="actualizado">Valor de ejemplo</div><div class="fuente">Cotización ilustrativa</div></article>
+    <article class="cotizacion"><div class="cotizacion-nombre">🇵🇾 Paraguay</div><div class="cotizacion-tipo">Dólar / guaraní</div><div class="cotizacion-valor">₲ 7.200</div><div class="actualizado">Valor de ejemplo</div><div class="fuente">Cotización ilustrativa</div></article>
+  </div>
+
+  <div class="informacion"><div>💡</div><div><h3>Información transparente</h3><p>CAMBIO utiliza cotizaciones de referencia. Los valores pueden diferir de los tipos de cambio reales.</p></div></div>
+
+  <div class="publicidad-inicio">
+    <strong>Publicidad de tiendas y comercios textiles</strong>
+    <p>Encontrá servicios de nuestra comunidad.</p>
+    <button type="button" class="llamado" id="irNegocios">¡Publicitá tu negocio con CAMBIO! →</button>
+    <p style="margin-top:8px">Dale visibilidad a tu comercio y conectá con nuestra comunidad.</p>
+  </div>
+  <button type="button" class="boton-secundario" id="abrirDirectorio">Ver negocios textiles de la comunidad →</button>
+  <div class="pie">Versión 1.0.0 · Creador: Shamir A.</div>
+</section>
+
+<section id="directorio" class="oculto">
+  <header class="encabezado">
+    <div class="billetera" aria-hidden="true">▱</div>
+    <div><div class="marca">CAMBIO</div><div class="subtitulo">Negocios de nuestra comunidad</div></div>
+    <button type="button" class="boton-icono" id="volverInicio" aria-label="Volver al inicio">⌂</button>
+  </header>
+
+  <div class="hero-directorio"><h1>Negocios destacados</h1><p>Emprendimientos textiles de Villa Celina y alrededores.</p></div>
+  <div class="titulo-seccion">Comercios destacados</div>
+
+  <div class="lista-negocios" id="listaNegocios">
+    <button type="button" class="negocio" data-ficha="juan"><div class="miniatura">▤</div><div><h3>Textil Juan</h3><div class="descripcion-negocio">Venta de telas por kilo y precios mayoristas.</div></div><span class="flecha">›</span></button>
+    <button type="button" class="negocio" data-ficha="chisla"><div class="miniatura">✂</div><div><h3>Bordados Chisla</h3><div class="descripcion-negocio">Bordados personalizados.</div></div><span class="flecha">›</span></button>
+    <button type="button" class="negocio" data-ficha="andy"><div class="miniatura">▧</div><div><h3>Sublimados Andy</h3><div class="descripcion-negocio">Sublimación y personalización.</div></div><span class="flecha">›</span></button>
+  </div>
+
+  <div class="titulo-seccion">Buscá un servicio</div>
+  <p class="suave">Elegí el trabajo textil que necesitás.</p>
+  <div class="servicios">
+    <button type="button" class="servicio" data-servicio="Bordados">✂<br>Bordados</button>
+    <button type="button" class="servicio" data-servicio="Taller de costura">♧<br>Taller de costura</button>
+    <button type="button" class="servicio" data-servicio="Sublimación">▧<br>Sublimación</button>
+    <button type="button" class="servicio" data-servicio="Etiquetas">▱<br>Etiquetas</button>
+    <button type="button" class="servicio" data-servicio="Plotter y vinilo">▤<br>Plotter y vinilo</button>
+    <button type="button" class="servicio" data-servicio="Planchado textil">▣<br>Planchado textil</button>
+  </div>
+  <div id="resultadoServicio" class="resultado-servicio oculto" aria-live="polite"></div>
+
+  <div class="publicidad-directorio">
+    <h2>¿Tenés un emprendimiento?</h2><p>Dale visibilidad a tu negocio y conectá con nuestra comunidad.</p>
+    <button type="button" class="boton-amarillo" id="mostrarPublicidad">¡Publicitá tu negocio!</button>
+    <div id="detallePublicidad" class="detalle-publicidad oculto">En una próxima etapa, podrás enviar los datos de tu comercio para solicitar su publicación en CAMBIO.</div>
+  </div>
+  <div class="pie">Versión 1.0.0 · Creador: Shamir A.</div>
+</section>
+
+<section id="ficha" class="oculto">
+  <header class="encabezado">
+    <button type="button" class="boton-icono" id="volverDirectorio" aria-label="Volver al directorio" style="margin-left:0">←</button>
+    <div><div class="marca">CAMBIO</div><div class="subtitulo">Ficha del comercio</div></div>
+  </header>
+  <article class="ficha" id="contenidoFicha"></article>
+  <div class="pie">Versión 1.0.0 · Creador: Shamir A.</div>
+</section>
+
+</main>
+
 <script>
-  const pantallas = {
-    inicio: document.getElementById("inicio"),
-    directorio: document.getElementById("directorio"),
-    ficha: document.getElementById("ficha")
-  };
+const pantallas = {
+  inicio: document.getElementById("inicio"),
+  directorio: document.getElementById("directorio"),
+  ficha: document.getElementById("ficha")
+};
 
-  const tasas = {
-    BOB: { nombre: "bolivianos", simbolo: "Bs", porDolar: 11.85, decimales: 2 },
-    PEN: { nombre: "soles peruanos", simbolo: "S/", porDolar: 3.42, decimales: 2 },
-    PYG: { nombre: "guaraníes paraguayos", simbolo: "₲", porDolar: 7200, decimales: 0 }
-  };
+function mostrarPantalla(nombre) {
+  Object.entries(pantallas).forEach(([clave, elemento]) => {
+    elemento.classList.toggle("oculto", clave !== nombre);
+  });
+  window.scrollTo({top:0, behavior:"smooth"});
+}
 
-  let monedaSeleccionada = "BOB";
+document.getElementById("abrirDirectorio").addEventListener("click", () => mostrarPantalla("directorio"));
+document.getElementById("irNegocios").addEventListener("click", () => mostrarPantalla("directorio"));
+document.getElementById("volverInicio").addEventListener("click", () => mostrarPantalla("inicio"));
+document.getElementById("volverDirectorio").addEventListener("click", () => mostrarPantalla("directorio"));
 
-  function mostrarPantalla(nombre) {
-    Object.entries(pantallas).forEach(([clave, elemento]) => {
-      elemento.classList.toggle("oculto", clave !== nombre);
+let monedaSeleccionada = "BOB";
+const tasas = {
+  BOB:{nombre:"bolivianos",simbolo:"Bs",porDolar:11.85,decimales:2},
+  PEN:{nombre:"soles peruanos",simbolo:"S/",porDolar:3.42,decimales:2},
+  PYG:{nombre:"guaraníes paraguayos",simbolo:"₲",porDolar:7200,decimales:0}
+};
+
+document.querySelectorAll("[data-moneda]").forEach(boton => {
+  boton.addEventListener("click", () => {
+    monedaSeleccionada = boton.dataset.moneda;
+    document.querySelectorAll("[data-moneda]").forEach(item => {
+      const activa = item.dataset.moneda === monedaSeleccionada;
+      item.classList.toggle("activa",activa);
+      item.setAttribute("aria-pressed",String(activa));
     });
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  }
-
-  // Navegación entre las pantallas.
-  document.getElementById("abrirDirectorio").addEventListener("click", () => {
-    mostrarPantalla("directorio");
+    document.getElementById("avisoCalculo").classList.add("oculto");
   });
+});
 
-  document.getElementById("irNegocios").addEventListener("click", () => {
-    mostrarPantalla("directorio");
-  });
+function calcular() {
+  const campo = document.getElementById("importe");
+  const importe = Number(campo.value);
+  const aviso = document.getElementById("avisoCalculo");
 
-  document.getElementById("volverInicio").addEventListener("click", () => {
-    mostrarPantalla("inicio");
-  });
-
-  document.getElementById("volverDirectorio").addEventListener("click", () => {
-    mostrarPantalla("directorio");
-  });
-
-  // Selección de moneda mediante las banderas.
-  document.querySelectorAll("[data-moneda]").forEach(boton => {
-    boton.setAttribute("aria-pressed", boton.dataset.moneda === monedaSeleccionada);
-
-    boton.addEventListener("click", () => {
-      monedaSeleccionada = boton.dataset.moneda;
-
-      document.querySelectorAll("[data-moneda]").forEach(item => {
-        const seleccionada = item.dataset.moneda === monedaSeleccionada;
-        item.classList.toggle("activa", seleccionada);
-        item.setAttribute("aria-pressed", String(seleccionada));
-      });
-
-      document.getElementById("avisoCalculo").classList.add("oculto");
-    });
-  });
-
-  // Cálculo ilustrativo con las cotizaciones de ejemplo de la pantalla.
-  function calcularConversion() {
-    const campo = document.getElementById("importe");
-    const importe = Number(campo.value);
-    const aviso = document.getElementById("avisoCalculo");
-
-    if (campo.value.trim() === "" || !Number.isFinite(importe) || importe <= 0) {
-      aviso.innerHTML = `
-        <div>ℹ️</div>
-        <div>
-          <h3>Revisá el importe</h3>
-          <p>Ingresá una cantidad de pesos argentinos mayor que cero.</p>
-        </div>
-      `;
-      aviso.classList.remove("oculto");
-      campo.focus();
-      return;
-    }
-
-    // Conversión cruzada ilustrativa:
-    // pesos argentinos → dólares de referencia → moneda de destino.
-    const dolarBlueARS = 1540;
-    const destino = tasas[monedaSeleccionada];
-    const resultado = (importe / dolarBlueARS) * destino.porDolar;
-
-    const formato = new Intl.NumberFormat("es-AR", {
-      minimumFractionDigits: destino.decimales,
-      maximumFractionDigits: destino.decimales
-    }).format(resultado);
-
-    const pesosFormato = new Intl.NumberFormat("es-AR", {
-      maximumFractionDigits: 2
-    }).format(importe);
-
-    const bandera = {
-      BOB: "🇧🇴",
-      PEN: "🇵🇪",
-      PYG: "🇵🇾"
-    }[monedaSeleccionada];
-
-    aviso.innerHTML = `
-      <div style="font-size:24px" aria-hidden="true">${bandera}</div>
-      <div>
-        <h3>Resultado de la conversión</h3>
-        <p>${pesosFormato} pesos argentinos equivalen aproximadamente a:</p>
-        <div style="font-size:25px;font-weight:850;color:#17452F;margin:8px 0">
-          ${destino.simbolo} ${formato}
-        </div>
-        <p>Moneda seleccionada: ${destino.nombre}.</p>
-        <p style="font-size:11px">
-          Cálculo de demostración con cotizaciones ilustrativas.
-          No es una cotización en vivo.
-        </p>
-      </div>
-    `;
-
+  if (!campo.value.trim() || !Number.isFinite(importe) || importe <= 0) {
+    aviso.innerHTML = "<div>ℹ️</div><div><h3>Revisá el importe</h3><p>Ingresá una cantidad mayor que cero.</p></div>";
     aviso.classList.remove("oculto");
+    campo.focus();
+    return;
   }
 
-  document.getElementById("calcular").addEventListener("click", calcularConversion);
+  const destino = tasas[monedaSeleccionada];
+  const resultado = importe / 1540 * destino.porDolar;
+  const formatoResultado = new Intl.NumberFormat("es-AR", {
+    minimumFractionDigits:destino.decimales,
+    maximumFractionDigits:destino.decimales
+  }).format(resultado);
+  const formatoImporte = new Intl.NumberFormat("es-AR",{maximumFractionDigits:2}).format(importe);
+  const banderas = {BOB:"🇧🇴",PEN:"🇵🇪",PYG:"🇵🇾"};
 
-  document.getElementById("importe").addEventListener("keydown", evento => {
-    if (evento.key === "Enter") calcularConversion();
-  });
+  aviso.innerHTML = `
+    <div style="font-size:24px">${banderas[monedaSeleccionada]}</div>
+    <div>
+      <h3>Resultado de la conversión</h3>
+      <p>${formatoImporte} pesos argentinos equivalen aproximadamente a:</p>
+      <div style="font-size:25px;font-weight:850;color:#17452F;margin:8px 0">${destino.simbolo} ${formatoResultado}</div>
+      <p>Moneda de destino: ${destino.nombre}.</p>
+      <p style="font-size:11px">Resultado ilustrativo; cotizaciones no conectadas en vivo.</p>
+    </div>`;
+  aviso.classList.remove("oculto");
+}
 
-  // Datos de ejemplo para las fichas comerciales.
-  const datosFichas = {
-    juan: {
-      nombre: "Textil Juan",
-      descripcion: "Venta de telas por kilo y precios mayoristas.",
-      fotos: [
-        "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=600&q=80",
-        "https://images.unsplash.com/photo-1528459801416-a9e53bbf4e17?auto=format&fit=crop&w=600&q=80"
-      ],
-      texto: "Algunas telas disponibles: W15, W18, dry fit y otros tipos de tela. Consultá por colores y stock.",
-      telefono: "WhatsApp del comercio",
-      ubicacion: "Ubicación de ejemplo en Villa Celina"
-    },
-    chisla: {
-      nombre: "Bordados Chisla",
-      descripcion: "Bordados personalizados.",
-      fotos: [
-        "https://images.unsplash.com/photo-1452860606245-08befc0ff44b?auto=format&fit=crop&w=600&q=80",
-        "https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=600&q=80"
-      ],
-      texto: "Bordados de nombres, escudos y diseños personalizados. Consultá por trabajos y disponibilidad.",
-      telefono: "WhatsApp del comercio",
-      ubicacion: "Ubicación de ejemplo en Villa Celina"
-    },
-    andy: {
-      nombre: "Sublimados Andy",
-      descripcion: "Sublimación y personalización.",
-      fotos: [
-        "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=600&q=80",
-        "https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?auto=format&fit=crop&w=600&q=80"
-      ],
-      texto: "Estampados y prendas personalizadas. Consultá por diseños, cantidades y disponibilidad.",
-      telefono: "WhatsApp del comercio",
-      ubicacion: "Ubicación de ejemplo en Villa Celina"
-    }
-  };
+document.getElementById("calcular").addEventListener("click",calcular);
+document.getElementById("importe").addEventListener("keydown",e => {
+  if(e.key === "Enter") calcular();
+});
 
-  function abrirFicha(id) {
-    const negocio = datosFichas[id];
-    if (!negocio) return;
-
-    const fotosHTML = negocio.fotos.map((url, indice) => `
-      <div class="foto">
-        <img
-          src="${url}"
-          alt="Imagen ilustrativa ${indice + 1} de ${negocio.nombre}"
-          loading="lazy"
-          onerror="this.style.display='none';this.parentElement.textContent='Foto próximamente';"
-        >
-      </div>
-    `).join("");
-
-    document.getElementById("contenidoFicha").innerHTML = `
-      <div class="nombre-ficha">${negocio.nombre}</div>
-      <p class="suave">${negocio.descripcion}</p>
-
-      <div class="fotos">${fotosHTML}</div>
-
-      <p class="texto-ficha">${negocio.texto}</p>
-
-      <hr class="separador">
-
-      <div class="contacto">
-        <div class="contacto-icono">☏</div>
-        <div>
-          <div class="contacto-titulo">Contacto</div>
-          <div class="contacto-detalle">${negocio.telefono}</div>
-          <div class="nota">El contacto real se agregará cuando el comercio proporcione sus datos.</div>
-        </div>
-      </div>
-
-      <div class="contacto">
-        <div class="contacto-icono">⌖</div>
-        <div>
-          <div class="contacto-titulo">Ubicación</div>
-          <div class="contacto-detalle">${negocio.ubicacion}</div>
-          <div class="nota">La dirección y el mapa se incorporarán al verificar el negocio.</div>
-        </div>
-      </div>
-    `;
-
-    mostrarPantalla("ficha");
+const negocios = {
+  juan:{
+    nombre:"Textil Juan",
+    descripcion:"Venta de telas por kilo y precios mayoristas.",
+    fotos:[
+      "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=600&q=80",
+      "https://images.unsplash.com/photo-1528459801416-a9e53bbf4e17?auto=format&fit=crop&w=600&q=80"
+    ],
+    texto:"Algunas telas disponibles: W15, W18, dry fit y otros tipos de tela. Consultá por colores y stock.",
+    contacto:"WhatsApp del comercio",
+    ubicacion:"Dirección pendiente de confirmar."
+  },
+  chisla:{
+    nombre:"Bordados Chisla",
+    descripcion:"Bordados personalizados.",
+    fotos:[
+      "https://images.unsplash.com/photo-1452860606245-08befc0ff44b?auto=format&fit=crop&w=600&q=80",
+      "https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=600&q=80"
+    ],
+    texto:"Bordados de nombres, escudos y diseños personalizados. Consultá por trabajos y disponibilidad.",
+    contacto:"WhatsApp del comercio",
+    ubicacion:"Dirección pendiente de confirmar."
+  },
+  andy:{
+    nombre:"Sublimados Andy",
+    descripcion:"Sublimación y personalización.",
+    fotos:[
+      "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=600&q=80",
+      "https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?auto=format&fit=crop&w=600&q=80"
+    ],
+    texto:"Estampados y prendas personalizadas. Consultá por diseños, cantidades y disponibilidad.",
+    contacto:"WhatsApp del comercio",
+    ubicacion:"Dirección pendiente de confirmar."
   }
+};
 
-  document.querySelectorAll("[data-ficha]").forEach(boton => {
-    boton.addEventListener("click", () => {
-      abrirFicha(boton.dataset.ficha);
+function abrirFicha(id) {
+  const n = negocios[id];
+  if(!n) return;
+
+  const fotos = n.fotos.map((url,i) => `
+    <div class="foto">
+      <img src="${url}" alt="Foto ilustrativa ${i+1} de ${n.nombre}"
+        onerror="this.style.display='none';this.parentElement.textContent='Foto ilustrativa';">
+    </div>`).join("");
+
+  document.getElementById("contenidoFicha").innerHTML = `
+    <div class="nombre-ficha">${n.nombre}</div>
+    <p class="suave">${n.descripcion}</p>
+    <div class="fotos">${fotos}</div>
+    <p class="texto-ficha">${n.texto}</p>
+    <hr class="separador">
+    <div class="contacto"><div class="contacto-icono">☏</div><div><div class="contacto-titulo">Contacto</div><div class="contacto-detalle">${n.contacto}</div><div class="nota">El contacto real se agregará al confirmar los datos del comercio.</div></div></div>
+    <div class="contacto"><div class="contacto-icono">⌖</div><div><div class="contacto-titulo">Ubicación</div><div class="contacto-detalle">${n.ubicacion}</div></div></div>`;
+
+  mostrarPantalla("ficha");
+}
+
+document.querySelectorAll("[data-ficha]").forEach(boton => {
+  boton.addEventListener("click",() => abrirFicha(boton.dataset.ficha));
+});
+
+const categorias = {
+  "Bordados":["chisla"],
+  "Taller de costura":[],
+  "Sublimación":["andy"],
+  "Etiquetas":[],
+  "Plotter y vinilo":[],
+  "Planchado textil":[]
+};
+
+document.querySelectorAll("[data-servicio]").forEach(boton => {
+  boton.addEventListener("click",() => {
+    const servicio = boton.dataset.servicio;
+    const coincidencias = categorias[servicio] || [];
+    document.querySelectorAll("[data-servicio]").forEach(item => {
+      item.classList.toggle("activo",item === boton);
+      item.setAttribute("aria-pressed",String(item === boton));
     });
-  });
-
-  // Categorías: muestra los comercios de ejemplo que coinciden.
-  const categorias = {
-    "Bordados": ["chisla"],
-    "Sublimación": ["andy"],
-    "Taller de costura": [],
-    "Etiquetas": [],
-    "Plotter y vinilo": [],
-    "Planchado textil": []
-  };
-
-  document.querySelectorAll("[data-servicio]").forEach(boton => {
-    boton.addEventListener("click", () => {
-      const servicio = boton.dataset.servicio;
-      const coincidencias = categorias[servicio] || [];
-      const tarjetas = document.querySelectorAll("[data-ficha]");
-      const resultado = document.getElementById("resultadoServicio");
-
-      document.querySelectorAll("[data-servicio]").forEach(item => {
-        item.classList.toggle("activo", item === boton);
-        item.setAttribute("aria-pressed", String(item === boton));
-      });
-
-      tarjetas.forEach(tarjeta => {
-        tarjeta.classList.toggle(
-          "oculto",
-          !coincidencias.includes(tarjeta.dataset.ficha)
-        );
-      });
-
-      if (coincidencias.length) {
-        resultado.textContent =
-          `Comercios de ejemplo para ${servicio}. Tocá una tarjeta para ver su ficha.`;
-      } else {
-        resultado.textContent =
-          `Todavía no hay comercios de ejemplo publicados para ${servicio}.`;
-      }
-
-      resultado.classList.remove("oculto");
+    document.querySelectorAll("[data-ficha]").forEach(tarjeta => {
+      tarjeta.classList.toggle("oculto",!coincidencias.includes(tarjeta.dataset.ficha));
     });
+
+    const resultado = document.getElementById("resultadoServicio");
+    resultado.textContent = coincidencias.length
+      ? `Comercios de ejemplo para ${servicio}. Tocá una tarjeta para abrir su ficha.`
+      : `Todavía no hay comercios de ejemplo publicados para ${servicio}.`;
+    resultado.classList.remove("oculto");
   });
+});
 
-  // Aviso informativo de publicidad.
-  document.getElementById("mostrarPublicidad").addEventListener("click", () => {
-    const detalle = document.getElementById("detallePublicidad");
-    detalle.classList.toggle("oculto");
-
-    document.getElementById("mostrarPublicidad").textContent =
-      detalle.classList.contains("oculto")
-        ? "¡Publicitá tu negocio!"
-        : "Ocultar información";
-  });
-                                                         </script>
-
+// Restablece las tarjetas cuando se vuelve al directorio.
+document.getElementById("volverDirectorio").addEventListener("click",() => {
+  document.querySelectorAll("[data-ficha]").forEach(t => t.c
