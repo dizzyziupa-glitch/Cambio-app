@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -6,11 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>CAMBIO | Tu dinero más fácil</title>
 <style>
-:root {
-  --crema:#F5EBD5; --crema2:#EFE4C9; --verde:#17452F;
-  --verde2:#28583E; --amarillo:#E5C64F; --texto:#20352A;
-  --suave:#58675B; --linea:#D8CCB1; --blanco:#fff;
-}
+:root{--crema:#F5EBD5;--crema2:#EFE4C9;--verde:#17452F;--verde2:#28583E;--amarillo:#E5C64F;--texto:#20352A;--suave:#58675B;--linea:#D8CCB1}
 *{box-sizing:border-box}
 body{margin:0;background:#E8E5DC;color:var(--texto);font-family:Arial,Helvetica,sans-serif}
 button,input{font:inherit}
@@ -21,7 +16,7 @@ button{cursor:pointer}
 .billetera{display:grid;place-items:center;width:52px;height:52px;flex-shrink:0;border-radius:15px;background:var(--amarillo);color:var(--verde);font-size:27px}
 .marca{color:var(--verde);font-size:23px;font-weight:850}
 .subtitulo{margin-top:4px;color:var(--suave);font-size:12px}
-.boton-icono{display:grid;place-items:center;width:44px;height:44px;margin-left:auto;border:0;border-radius:50%;background:var(--verde);color:white;font-size:24px}
+.boton-icono{display:grid;place-items:center;width:44px;height:44px;margin-left:auto;border:0;border-radius:50%;background:var(--verde);color:#fff;font-size:24px}
 h1,h2,h3,p{margin-top:0}
 h1{margin-bottom:7px;color:var(--verde);font-size:22px}
 h2{margin-bottom:6px;color:var(--verde);font-size:19px}
@@ -31,43 +26,43 @@ p{line-height:1.45}
 .hero{margin-bottom:15px;padding:17px 16px;border-radius:18px;background:var(--crema2)}
 .etiqueta{display:block;margin-bottom:7px;color:var(--verde);font-size:13px;font-weight:700}
 .monedas{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0 16px}
-.moneda{position:relative;padding:10px 6px;border:1px solid var(--linea);border-radius:12px;background:white;font-size:27px}
+.moneda{position:relative;padding:10px 6px;border:1px solid var(--linea);border-radius:12px;background:#fff;font-size:27px}
 .moneda.activa{border-color:var(--verde);background:var(--verde);box-shadow:inset 0 0 0 2px var(--amarillo)}
 .moneda.activa::after{position:absolute;top:5px;right:7px;color:var(--amarillo);content:"✓";font-size:12px}
-.importe{width:100%;padding:14px 13px;border:1px solid var(--linea);border-radius:12px;background:white;color:var(--verde);font-size:22px;font-weight:750}
+.importe{width:100%;padding:14px 13px;border:1px solid var(--linea);border-radius:12px;background:#fff;color:var(--verde);font-size:22px;font-weight:750}
 .aclaracion{margin-top:6px;color:var(--suave);font-size:12px}
-.calcular{display:flex;width:100%;align-items:center;justify-content:center;gap:10px;margin:14px 0 18px;padding:17px;border:0;border-radius:13px;background:var(--verde);color:white;font-size:16px;font-weight:850}
+.calcular{display:flex;width:100%;align-items:center;justify-content:center;gap:10px;margin:14px 0 18px;padding:17px;border:0;border-radius:13px;background:var(--verde);color:#fff;font-size:16px;font-weight:850}
 .titulo-seccion{margin:12px 0 10px;color:var(--verde);font-size:18px;font-weight:800}
 .cotizaciones{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
-.cotizacion{min-width:0;padding:12px;border:1px solid #E3D9C4;border-radius:14px;background:white}
+.cotizacion{min-width:0;padding:12px;border:1px solid #E3D9C4;border-radius:14px;background:#fff}
 .cotizacion-nombre{margin-bottom:6px;color:var(--verde);font-size:13px;font-weight:800}
 .cotizacion-tipo{min-height:30px;color:var(--suave);font-size:12px}
 .cotizacion-valor{margin:6px 0;color:var(--verde);font-size:21px;font-weight:850}
 .actualizado{color:var(--suave);font-size:11px;line-height:1.45}
 .fuente{margin-top:5px;color:#8A7650;font-size:10px}
-.informacion{display:flex;gap:9px;align-items:flex-start;margin-top:14px;padding:12px;border:1px solid #E3D9C4;border-radius:13px;background:white}
+.informacion{display:flex;gap:9px;align-items:flex-start;margin-top:14px;padding:12px;border:1px solid #E3D9C4;border-radius:13px;background:#fff}
 .informacion h3{margin-bottom:4px;font-size:14px}
 .informacion p{margin-bottom:0;color:var(--suave);font-size:12px}
-.publicidad-inicio,.publicidad-directorio{margin-top:14px;padding:16px;border-radius:16px;background:var(--verde);color:white}
+.publicidad-inicio,.publicidad-directorio{margin-top:14px;padding:16px;border-radius:16px;background:var(--verde);color:#fff}
 .publicidad-inicio p,.publicidad-directorio p{margin-bottom:0;color:#E9E6D8;font-size:13px}
 .llamado{display:block;margin-top:11px;padding:0;border:0;background:transparent;color:var(--amarillo);font-weight:850;text-align:left}
-.boton-secundario{width:100%;margin-top:12px;padding:13px;border:1px solid var(--verde);border-radius:11px;background:white;color:var(--verde);font-weight:750}
-.hero-directorio{margin-bottom:18px;padding:18px;border-radius:17px;background:var(--verde);color:white}
-.hero-directorio h1{color:white}
+.boton-secundario{width:100%;margin-top:12px;padding:13px;border:1px solid var(--verde);border-radius:11px;background:#fff;color:var(--verde);font-weight:750}
+.hero-directorio{margin-bottom:18px;padding:18px;border-radius:17px;background:var(--verde);color:#fff}
+.hero-directorio h1{color:#fff}
 .hero-directorio p{margin-bottom:0;color:#E9E6D8;font-size:14px}
 .lista-negocios{display:grid;gap:10px;margin-bottom:19px}
-.negocio{display:flex;width:100%;align-items:center;gap:12px;padding:12px;border:1px solid #E3D9C4;border-radius:15px;background:white;text-align:left}
+.negocio{display:flex;width:100%;align-items:center;gap:12px;padding:12px;border:1px solid #E3D9C4;border-radius:15px;background:#fff;text-align:left}
 .miniatura{display:grid;width:72px;height:72px;flex-shrink:0;place-items:center;border-radius:11px;background:#E8E4D8;color:var(--verde);font-size:30px}
 .descripcion-negocio{margin-top:4px;color:var(--suave);font-size:12px;line-height:1.35}
 .flecha{margin-left:auto;color:var(--verde);font-size:23px}
 .servicios{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:18px}
-.servicio{display:flex;min-height:90px;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:13px 9px;border:1px solid #E3D9C4;border-radius:14px;background:white;color:var(--verde);font-size:13px;font-weight:750;text-align:center}
-.servicio.activo{border-color:var(--verde);background:var(--verde);color:white}
-.resultado-servicio{margin:-6px 0 18px;padding:12px;border-radius:12px;background:white;color:var(--suave);font-size:13px}
-.publicidad-directorio h2{color:white}
+.servicio{display:flex;min-height:90px;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:13px 9px;border:1px solid #E3D9C4;border-radius:14px;background:#fff;color:var(--verde);font-size:13px;font-weight:750;text-align:center}
+.servicio.activo{border-color:var(--verde);background:var(--verde);color:#fff}
+.resultado-servicio{margin:-6px 0 18px;padding:12px;border-radius:12px;background:#fff;color:var(--suave);font-size:13px}
+.publicidad-directorio h2{color:#fff}
 .boton-amarillo{width:100%;margin-top:13px;padding:13px;border:0;border-radius:11px;background:var(--amarillo);color:var(--verde);font-weight:850}
-.detalle-publicidad{margin-top:12px;padding:12px;border-radius:11px;background:var(--verde2);color:white;font-size:13px}
-.ficha{padding:14px;border:1px solid #E3D9C4;border-radius:16px;background:white}
+.detalle-publicidad{margin-top:12px;padding:12px;border-radius:11px;background:var(--verde2);color:#fff;font-size:13px}
+.ficha{padding:14px;border:1px solid #E3D9C4;border-radius:16px;background:#fff}
 .nombre-ficha{margin-bottom:4px;color:var(--verde);font-size:24px;font-weight:850}
 .fotos{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:12px 0}
 .foto{display:grid;min-height:110px;aspect-ratio:4/3;place-items:center;overflow:hidden;border-radius:10px;background:#E8E4D8;color:var(--suave);text-align:center;font-size:12px}
@@ -88,7 +83,7 @@ p{line-height:1.45}
 
 <section id="inicio">
   <header class="encabezado">
-    <div class="billetera" aria-hidden="true">▱</div>
+    <div class="billetera" aria-hidden="true"><svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 7V5.5A1.5 1.5 0 0 0 17.5 4H5a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2H5"/><circle cx="16.5" cy="13" r="1.2" fill="currentColor"/></svg></div>
     <div><div class="marca">CAMBIO</div><div class="subtitulo">Tu dinero más fácil</div></div>
   </header>
 
@@ -133,7 +128,7 @@ p{line-height:1.45}
 
 <section id="directorio" class="oculto">
   <header class="encabezado">
-    <div class="billetera" aria-hidden="true">▱</div>
+    <div class="billetera" aria-hidden="true"><svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 7V5.5A1.5 1.5 0 0 0 17.5 4H5a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2H5"/><circle cx="16.5" cy="13" r="1.2" fill="currentColor"/></svg></div>
     <div><div class="marca">CAMBIO</div><div class="subtitulo">Negocios de nuestra comunidad</div></div>
     <button type="button" class="boton-icono" id="volverInicio" aria-label="Volver al inicio">⌂</button>
   </header>
@@ -189,28 +184,50 @@ function mostrarPantalla(nombre) {
   Object.entries(pantallas).forEach(([clave, elemento]) => {
     elemento.classList.toggle("oculto", clave !== nombre);
   });
-  window.scrollTo({top:0, behavior:"smooth"});
+  window.scrollTo(0, 0);
 }
 
+// Quita el filtro de servicios y muestra todos los negocios otra vez.
+function reiniciarFiltro() {
+  document.querySelectorAll("[data-ficha]").forEach(t => t.classList.remove("oculto"));
+  document.querySelectorAll("[data-servicio]").forEach(s => {
+    s.classList.remove("activo");
+    s.setAttribute("aria-pressed", "false");
+  });
+  document.getElementById("resultadoServicio").classList.add("oculto");
+}
+
+// Navegación
 document.getElementById("abrirDirectorio").addEventListener("click", () => mostrarPantalla("directorio"));
 document.getElementById("irNegocios").addEventListener("click", () => mostrarPantalla("directorio"));
-document.getElementById("volverInicio").addEventListener("click", () => mostrarPantalla("inicio"));
-document.getElementById("volverDirectorio").addEventListener("click", () => mostrarPantalla("directorio"));
+document.getElementById("volverInicio").addEventListener("click", () => {
+  reiniciarFiltro();
+  mostrarPantalla("inicio");
+});
+document.getElementById("volverDirectorio").addEventListener("click", () => {
+  reiniciarFiltro();
+  mostrarPantalla("directorio");
+});
+document.getElementById("mostrarPublicidad").addEventListener("click", () => {
+  document.getElementById("detallePublicidad").classList.toggle("oculto");
+});
 
+// Calculadora
 let monedaSeleccionada = "BOB";
 const tasas = {
-  BOB:{nombre:"bolivianos",simbolo:"Bs",porDolar:11.85,decimales:2},
-  PEN:{nombre:"soles peruanos",simbolo:"S/",porDolar:3.42,decimales:2},
-  PYG:{nombre:"guaraníes paraguayos",simbolo:"₲",porDolar:7200,decimales:0}
+  BOB: {nombre: "bolivianos", simbolo: "Bs", porDolar: 11.85, decimales: 2},
+  PEN: {nombre: "soles peruanos", simbolo: "S/", porDolar: 3.42, decimales: 2},
+  PYG: {nombre: "guaraníes paraguayos", simbolo: "₲", porDolar: 7200, decimales: 0}
 };
+const banderas = {BOB: "🇧🇴", PEN: "🇵🇪", PYG: "🇵🇾"};
 
 document.querySelectorAll("[data-moneda]").forEach(boton => {
   boton.addEventListener("click", () => {
     monedaSeleccionada = boton.dataset.moneda;
     document.querySelectorAll("[data-moneda]").forEach(item => {
       const activa = item.dataset.moneda === monedaSeleccionada;
-      item.classList.toggle("activa",activa);
-      item.setAttribute("aria-pressed",String(activa));
+      item.classList.toggle("activa", activa);
+      item.setAttribute("aria-pressed", String(activa));
     });
     document.getElementById("avisoCalculo").classList.add("oculto");
   });
@@ -231,11 +248,10 @@ function calcular() {
   const destino = tasas[monedaSeleccionada];
   const resultado = importe / 1540 * destino.porDolar;
   const formatoResultado = new Intl.NumberFormat("es-AR", {
-    minimumFractionDigits:destino.decimales,
-    maximumFractionDigits:destino.decimales
+    minimumFractionDigits: destino.decimales,
+    maximumFractionDigits: destino.decimales
   }).format(resultado);
-  const formatoImporte = new Intl.NumberFormat("es-AR",{maximumFractionDigits:2}).format(importe);
-  const banderas = {BOB:"🇧🇴",PEN:"🇵🇪",PYG:"🇵🇾"};
+  const formatoImporte = new Intl.NumberFormat("es-AR", {maximumFractionDigits: 2}).format(importe);
 
   aviso.innerHTML = `
     <div style="font-size:24px">${banderas[monedaSeleccionada]}</div>
@@ -249,54 +265,55 @@ function calcular() {
   aviso.classList.remove("oculto");
 }
 
-document.getElementById("calcular").addEventListener("click",calcular);
-document.getElementById("importe").addEventListener("keydown",e => {
-  if(e.key === "Enter") calcular();
+document.getElementById("calcular").addEventListener("click", calcular);
+document.getElementById("importe").addEventListener("keydown", e => {
+  if (e.key === "Enter") calcular();
 });
 
+// Negocios
 const negocios = {
-  juan:{
-    nombre:"Textil Juan",
-    descripcion:"Venta de telas por kilo y precios mayoristas.",
-    fotos:[
+  juan: {
+    nombre: "Textil Juan",
+    descripcion: "Venta de telas por kilo y precios mayoristas.",
+    fotos: [
       "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=600&q=80",
       "https://images.unsplash.com/photo-1528459801416-a9e53bbf4e17?auto=format&fit=crop&w=600&q=80"
     ],
-    texto:"Algunas telas disponibles: W15, W18, dry fit y otros tipos de tela. Consultá por colores y stock.",
-    contacto:"WhatsApp del comercio",
-    ubicacion:"Dirección pendiente de confirmar."
+    texto: "Algunas telas disponibles: W15, W18, dry fit y otros tipos de tela. Consultá por colores y stock.",
+    contacto: "WhatsApp del comercio",
+    ubicacion: "Dirección pendiente de confirmar."
   },
-  chisla:{
-    nombre:"Bordados Chisla",
-    descripcion:"Bordados personalizados.",
-    fotos:[
+  chisla: {
+    nombre: "Bordados Chisla",
+    descripcion: "Bordados personalizados.",
+    fotos: [
       "https://images.unsplash.com/photo-1452860606245-08befc0ff44b?auto=format&fit=crop&w=600&q=80",
       "https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=600&q=80"
     ],
-    texto:"Bordados de nombres, escudos y diseños personalizados. Consultá por trabajos y disponibilidad.",
-    contacto:"WhatsApp del comercio",
-    ubicacion:"Dirección pendiente de confirmar."
+    texto: "Bordados de nombres, escudos y diseños personalizados. Consultá por trabajos y disponibilidad.",
+    contacto: "WhatsApp del comercio",
+    ubicacion: "Dirección pendiente de confirmar."
   },
-  andy:{
-    nombre:"Sublimados Andy",
-    descripcion:"Sublimación y personalización.",
-    fotos:[
+  andy: {
+    nombre: "Sublimados Andy",
+    descripcion: "Sublimación y personalización.",
+    fotos: [
       "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=600&q=80",
       "https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?auto=format&fit=crop&w=600&q=80"
     ],
-    texto:"Estampados y prendas personalizadas. Consultá por diseños, cantidades y disponibilidad.",
-    contacto:"WhatsApp del comercio",
-    ubicacion:"Dirección pendiente de confirmar."
+    texto: "Estampados y prendas personalizadas. Consultá por diseños, cantidades y disponibilidad.",
+    contacto: "WhatsApp del comercio",
+    ubicacion: "Dirección pendiente de confirmar."
   }
 };
 
 function abrirFicha(id) {
   const n = negocios[id];
-  if(!n) return;
+  if (!n) return;
 
-  const fotos = n.fotos.map((url,i) => `
+  const fotos = n.fotos.map((url, i) => `
     <div class="foto">
-      <img src="${url}" alt="Foto ilustrativa ${i+1} de ${n.nombre}"
+      <img src="${url}" alt="Foto ilustrativa ${i + 1} de ${n.nombre}"
         onerror="this.style.display='none';this.parentElement.textContent='Foto ilustrativa';">
     </div>`).join("");
 
@@ -313,38 +330,4 @@ function abrirFicha(id) {
 }
 
 document.querySelectorAll("[data-ficha]").forEach(boton => {
-  boton.addEventListener("click",() => abrirFicha(boton.dataset.ficha));
-});
-
-const categorias = {
-  "Bordados":["chisla"],
-  "Taller de costura":[],
-  "Sublimación":["andy"],
-  "Etiquetas":[],
-  "Plotter y vinilo":[],
-  "Planchado textil":[]
-};
-
-document.querySelectorAll("[data-servicio]").forEach(boton => {
-  boton.addEventListener("click",() => {
-    const servicio = boton.dataset.servicio;
-    const coincidencias = categorias[servicio] || [];
-    document.querySelectorAll("[data-servicio]").forEach(item => {
-      item.classList.toggle("activo",item === boton);
-      item.setAttribute("aria-pressed",String(item === boton));
-    });
-    document.querySelectorAll("[data-ficha]").forEach(tarjeta => {
-      tarjeta.classList.toggle("oculto",!coincidencias.includes(tarjeta.dataset.ficha));
-    });
-
-    const resultado = document.getElementById("resultadoServicio");
-    resultado.textContent = coincidencias.length
-      ? `Comercios de ejemplo para ${servicio}. Tocá una tarjeta para abrir su ficha.`
-      : `Todavía no hay comercios de ejemplo publicados para ${servicio}.`;
-    resultado.classList.remove("oculto");
-  });
-});
-
-// Restablece las tarjetas cuando se vuelve al directorio.
-document.getElementById("volverDirectorio").addEventListener("click",() => {
-  document.querySelectorAll("[data-ficha]").forEach(t => t.c
+  boton.addEventListener("click", () => abrirFic
