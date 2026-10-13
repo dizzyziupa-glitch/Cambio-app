@@ -4,6 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>CAMBIO | Tu dinero más fácil</title>
+<meta name="theme-color" content="#17452F">
+<link rel="icon" type="image/svg+xml" href="icon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="manifest.json">
 <style>
 :root{--crema:#F5EBD5;--crema2:#EFE4C9;--verde:#17452F;--verde2:#28583E;--amarillo:#E5C64F;--texto:#20352A;--suave:#58675B;--linea:#D8CCB1}
 *{box-sizing:border-box}
@@ -45,6 +50,7 @@ p{line-height:1.45}
 .informacion p{margin-bottom:0;color:var(--suave);font-size:12px}
 .publicidad-inicio,.publicidad-directorio{margin-top:14px;padding:16px;border-radius:16px;background:var(--verde);color:#fff}
 .publicidad-inicio p,.publicidad-directorio p{margin-bottom:0;color:#E9E6D8;font-size:13px}
+.llamado-texto{margin-top:11px;color:var(--amarillo);font-weight:850}
 .llamado{display:block;margin-top:11px;padding:0;border:0;background:transparent;color:var(--amarillo);font-weight:850;text-align:left}
 .boton-secundario{width:100%;margin-top:12px;padding:13px;border:1px solid var(--verde);border-radius:11px;background:#fff;color:var(--verde);font-weight:750}
 .hero-directorio{margin-bottom:18px;padding:18px;border-radius:17px;background:var(--verde);color:#fff}
@@ -73,6 +79,11 @@ p{line-height:1.45}
 .contacto-icono{width:28px;flex-shrink:0;font-size:23px;text-align:center}
 .contacto-titulo{margin-bottom:3px;color:var(--verde);font-size:13px;font-weight:800}
 .contacto-detalle{color:var(--suave);font-size:12px}
+.boton-whatsapp{display:inline-block;margin-top:8px;padding:11px 16px;border-radius:11px;background:#25D366;color:#fff;font-weight:850;font-size:14px;text-decoration:none}
+.proximamente{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:12px;padding:14px;border:2px dashed var(--linea);border-radius:13px;background:var(--crema2);color:var(--verde)}
+.proximamente p{margin:4px 0 0;color:var(--suave);font-size:12px}
+.etiqueta-pronto{flex-shrink:0;padding:6px 10px;border-radius:20px;background:var(--amarillo);color:var(--verde);font-size:11px;font-weight:850}
+.negocio.vacio{border:2px dashed var(--verde);background:var(--crema2);color:inherit;text-decoration:none}
 .nota{margin-top:10px;color:#8A7650;font-size:10px}
 .pie{margin-top:17px;color:#7B806F;font-size:11px;text-align:center}
 @media(min-width:560px){body{padding:20px 0}.app{min-height:calc(100vh - 40px);border-radius:22px}}
@@ -108,10 +119,10 @@ p{line-height:1.45}
 
   <div class="titulo-seccion">Cotizaciones de referencia</div>
   <div class="cotizaciones">
-    <article class="cotizacion"><div class="cotizacion-nombre">🇦🇷 Argentina</div><div class="cotizacion-tipo">Dólar blue</div><div class="cotizacion-valor">$1.540</div><div class="actualizado">Valor de ejemplo</div><div class="fuente">Cotización ilustrativa</div></article>
-    <article class="cotizacion"><div class="cotizacion-nombre">🇧🇴 Bolivia</div><div class="cotizacion-tipo">Dólar paralelo</div><div class="cotizacion-valor">Bs 11,85</div><div class="actualizado">Valor de ejemplo</div><div class="fuente">Cotización ilustrativa</div></article>
-    <article class="cotizacion"><div class="cotizacion-nombre">🇵🇪 Perú</div><div class="cotizacion-tipo">Dólar / sol</div><div class="cotizacion-valor">S/ 3,42</div><div class="actualizado">Valor de ejemplo</div><div class="fuente">Cotización ilustrativa</div></article>
-    <article class="cotizacion"><div class="cotizacion-nombre">🇵🇾 Paraguay</div><div class="cotizacion-tipo">Dólar / guaraní</div><div class="cotizacion-valor">₲ 7.200</div><div class="actualizado">Valor de ejemplo</div><div class="fuente">Cotización ilustrativa</div></article>
+    <article class="cotizacion"><div class="cotizacion-nombre">🇦🇷 Argentina</div><div class="cotizacion-tipo">Dólar blue</div><div class="cotizacion-valor" id="val-ARS">$1.540</div><div class="actualizado" id="est-ARS">Valor de ejemplo</div><div class="fuente" id="fuente-ARS">Cotización ilustrativa</div></article>
+    <article class="cotizacion"><div class="cotizacion-nombre">🇧🇴 Bolivia</div><div class="cotizacion-tipo">Dólar paralelo</div><div class="cotizacion-valor" id="val-BOB">Bs 11,85</div><div class="actualizado" id="est-BOB">Valor de ejemplo</div><div class="fuente" id="fuente-BOB">Cotización ilustrativa</div></article>
+    <article class="cotizacion"><div class="cotizacion-nombre">🇵🇪 Perú</div><div class="cotizacion-tipo">Dólar / sol</div><div class="cotizacion-valor" id="val-PEN">S/ 3,44</div><div class="actualizado" id="est-PEN">Valor de ejemplo</div><div class="fuente" id="fuente-PEN">Cotización ilustrativa</div></article>
+    <article class="cotizacion"><div class="cotizacion-nombre">🇵🇾 Paraguay</div><div class="cotizacion-tipo">Dólar / guaraní</div><div class="cotizacion-valor" id="val-PYG">₲ 5.721</div><div class="actualizado" id="est-PYG">Valor de ejemplo</div><div class="fuente" id="fuente-PYG">Cotización ilustrativa</div></article>
   </div>
 
   <div class="informacion"><div>💡</div><div><h3>Información transparente</h3><p>CAMBIO utiliza cotizaciones de referencia. Los valores pueden diferir de los tipos de cambio reales.</p></div></div>
@@ -119,10 +130,11 @@ p{line-height:1.45}
   <div class="publicidad-inicio">
     <strong>Publicidad de tiendas y comercios textiles</strong>
     <p>Encontrá servicios de nuestra comunidad.</p>
-    <button type="button" class="llamado" id="irNegocios">¡Publicitá tu negocio con CAMBIO! →</button>
+    <button type="button" class="boton-amarillo" id="abrirDirectorio">📍 Tiendas por tu zona →</button>
+    <div class="llamado-texto">¡Publicitá tu negocio con CAMBIO!</div>
     <p style="margin-top:8px">Dale visibilidad a tu comercio y conectá con nuestra comunidad.</p>
   </div>
-  <button type="button" class="boton-secundario" id="abrirDirectorio">Ver negocios textiles de la comunidad →</button>
+  <div class="proximamente"><div><strong>EnvíosFácil</strong><p>Pronto vas a poder enviar plata a tu familia desde acá.</p></div><span class="etiqueta-pronto">Próximamente</span></div>
   <div class="pie">Versión 1.0.0 · Creador: Shamir A.</div>
 </section>
 
@@ -137,9 +149,9 @@ p{line-height:1.45}
   <div class="titulo-seccion">Comercios destacados</div>
 
   <div class="lista-negocios" id="listaNegocios">
-    <button type="button" class="negocio" data-ficha="juan"><div class="miniatura">▤</div><div><h3>Textil Juan</h3><div class="descripcion-negocio">Venta de telas por kilo y precios mayoristas.</div></div><span class="flecha">›</span></button>
-    <button type="button" class="negocio" data-ficha="chisla"><div class="miniatura">✂</div><div><h3>Bordados Chisla</h3><div class="descripcion-negocio">Bordados personalizados.</div></div><span class="flecha">›</span></button>
-    <button type="button" class="negocio" data-ficha="andy"><div class="miniatura">▧</div><div><h3>Sublimados Andy</h3><div class="descripcion-negocio">Sublimación y personalización.</div></div><span class="flecha">›</span></button>
+    <button type="button" class="negocio" data-ficha="quechisla"><div class="miniatura">✂</div><div><h3>Bordados Quechisla</h3><div class="descripcion-negocio">Bordados de todo tipo: logos, escudos y diseños propios.</div></div><span class="flecha">›</span></button>
+    <button type="button" class="negocio" data-ficha="ploteo"><div class="miniatura">▤</div><div><h3>Ploteo y Vinilo</h3><div class="descripcion-negocio">Corte de vinilo con tu logo, texto o diseño.</div></div><span class="flecha">›</span></button>
+    <a class="negocio vacio" href="https://wa.me/5491165647600?text=Hola%2C%20quiero%20publicitar%20mi%20negocio%20en%20CAMBIO" target="_blank" rel="noopener"><div class="miniatura">＋</div><div><h3>Tu negocio acá</h3><div class="descripcion-negocio">Escribinos por WhatsApp y publicá tu comercio.</div></div><span class="flecha">›</span></a>
   </div>
 
   <div class="titulo-seccion">Buscá un servicio</div>
@@ -199,7 +211,6 @@ function reiniciarFiltro() {
 
 // Navegación
 document.getElementById("abrirDirectorio").addEventListener("click", () => mostrarPantalla("directorio"));
-document.getElementById("irNegocios").addEventListener("click", () => mostrarPantalla("directorio"));
 document.getElementById("volverInicio").addEventListener("click", () => {
   reiniciarFiltro();
   mostrarPantalla("inicio");
@@ -209,15 +220,17 @@ document.getElementById("volverDirectorio").addEventListener("click", () => {
   mostrarPantalla("directorio");
 });
 document.getElementById("mostrarPublicidad").addEventListener("click", () => {
-  document.getElementById("detallePublicidad").classList.toggle("oculto");
+  window.open("https://wa.me/5491165647600?text=Hola%2C%20quiero%20publicitar%20mi%20negocio%20en%20CAMBIO", "_blank", "noopener");
 });
 
 // Calculadora
 let monedaSeleccionada = "BOB";
+let dolarArg = 1540;
+let cotizacionesVivas = false;
 const tasas = {
   BOB: {nombre: "bolivianos", simbolo: "Bs", porDolar: 11.85, decimales: 2},
-  PEN: {nombre: "soles peruanos", simbolo: "S/", porDolar: 3.42, decimales: 2},
-  PYG: {nombre: "guaraníes paraguayos", simbolo: "₲", porDolar: 7200, decimales: 0}
+  PEN: {nombre: "soles peruanos", simbolo: "S/", porDolar: 3.44, decimales: 2},
+  PYG: {nombre: "guaraníes paraguayos", simbolo: "₲", porDolar: 5721, decimales: 0}
 };
 const banderas = {BOB: "🇧🇴", PEN: "🇵🇪", PYG: "🇵🇾"};
 
@@ -246,7 +259,7 @@ function calcular() {
   }
 
   const destino = tasas[monedaSeleccionada];
-  const resultado = importe / 1540 * destino.porDolar;
+  const resultado = importe / dolarArg * destino.porDolar;
   const formatoResultado = new Intl.NumberFormat("es-AR", {
     minimumFractionDigits: destino.decimales,
     maximumFractionDigits: destino.decimales
@@ -260,10 +273,33 @@ function calcular() {
       <p>${formatoImporte} pesos argentinos equivalen aproximadamente a:</p>
       <div style="font-size:25px;font-weight:850;color:#17452F;margin:8px 0">${destino.simbolo} ${formatoResultado}</div>
       <p>Moneda de destino: ${destino.nombre}.</p>
-      <p style="font-size:11px">Resultado ilustrativo; cotizaciones no conectadas en vivo.</p>
+      <p style="font-size:11px">${cotizacionesVivas ? "Resultado aproximado con las cotizaciones de hoy." : "Resultado ilustrativo; no se pudieron actualizar las cotizaciones."}</p>
     </div>`;
   aviso.classList.remove("oculto");
 }
+
+async function cargarCotizaciones() {
+  try {
+    const r = await fetch("/api/cotizaciones");
+    if (!r.ok) throw new Error("sin conexión");
+    const d = await r.json();
+    const fmt = (n, dec) => new Intl.NumberFormat("es-AR", {minimumFractionDigits: dec, maximumFractionDigits: dec}).format(n);
+    const hora = new Date(d.actualizado).toLocaleString("es-AR", {day: "numeric", month: "short", hour: "2-digit", minute: "2-digit"});
+    const textos = {ARS: n => "$" + fmt(n, 0), BOB: n => "Bs " + fmt(n, 2), PEN: n => "S/ " + fmt(n, 2), PYG: n => "₲ " + fmt(n, 0)};
+    ["ARS", "BOB", "PEN", "PYG"].forEach(cod => {
+      const c = d[cod];
+      if (!c || !Number.isFinite(c.valor) || c.valor <= 0) return;
+      if (cod === "ARS") dolarArg = c.valor; else tasas[cod].porDolar = c.valor;
+      document.getElementById("val-" + cod).textContent = textos[cod](c.valor);
+      document.getElementById("est-" + cod).textContent = "Actualizado: " + hora;
+      document.getElementById("fuente-" + cod).textContent = c.fuente;
+      cotizacionesVivas = true;
+    });
+  } catch (e) {
+    /* Si falla, la app sigue con los valores de ejemplo */
+  }
+}
+cargarCotizaciones();
 
 document.getElementById("calcular").addEventListener("click", calcular);
 document.getElementById("importe").addEventListener("keydown", e => {
@@ -272,37 +308,22 @@ document.getElementById("importe").addEventListener("keydown", e => {
 
 // Negocios
 const negocios = {
-  juan: {
-    nombre: "Textil Juan",
-    descripcion: "Venta de telas por kilo y precios mayoristas.",
-    fotos: [
-      "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=600&q=80",
-      "https://images.unsplash.com/photo-1528459801416-a9e53bbf4e17?auto=format&fit=crop&w=600&q=80"
-    ],
-    texto: "Algunas telas disponibles: W15, W18, dry fit y otros tipos de tela. Consultá por colores y stock.",
-    contacto: "WhatsApp del comercio",
+  quechisla: {
+    nombre: "Bordados Quechisla",
+    descripcion: "Bordados de todo tipo.",
+    fotos: [],
+    texto: "Bordamos logos, escudos y diseños propios. Tenemos diseñador.",
+    contacto: "WhatsApp: 11 6564-7600",
+    whatsapp: "5491165647600",
     ubicacion: "Dirección pendiente de confirmar."
   },
-  chisla: {
-    nombre: "Bordados Chisla",
-    descripcion: "Bordados personalizados.",
-    fotos: [
-      "https://images.unsplash.com/photo-1452860606245-08befc0ff44b?auto=format&fit=crop&w=600&q=80",
-      "https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=600&q=80"
-    ],
-    texto: "Bordados de nombres, escudos y diseños personalizados. Consultá por trabajos y disponibilidad.",
-    contacto: "WhatsApp del comercio",
-    ubicacion: "Dirección pendiente de confirmar."
-  },
-  andy: {
-    nombre: "Sublimados Andy",
-    descripcion: "Sublimación y personalización.",
-    fotos: [
-      "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=600&q=80",
-      "https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?auto=format&fit=crop&w=600&q=80"
-    ],
-    texto: "Estampados y prendas personalizadas. Consultá por diseños, cantidades y disponibilidad.",
-    contacto: "WhatsApp del comercio",
+  ploteo: {
+    nombre: "Ploteo y Vinilo",
+    descripcion: "Corte de vinilo con tu logo, texto o diseño.",
+    fotos: [],
+    texto: "Cortamos vinilo con tu logo, palabras o diseño. Tenemos diseñador. Podés traer tu vinilo o usar el nuestro (con costo extra).",
+    contacto: "WhatsApp: 11 6564-9282",
+    whatsapp: "5491165649282",
     ubicacion: "Dirección pendiente de confirmar."
   }
 };
@@ -311,7 +332,7 @@ function abrirFicha(id) {
   const n = negocios[id];
   if (!n) return;
 
-  const fotos = n.fotos.map((url, i) => `
+  const fotos = !n.fotos.length ? '<div class="foto">Foto próximamente</div><div class="foto">Foto próximamente</div>' : n.fotos.map((url, i) => `
     <div class="foto">
       <img src="${url}" alt="Foto ilustrativa ${i + 1} de ${n.nombre}"
         onerror="this.style.display='none';this.parentElement.textContent='Foto ilustrativa';">
@@ -323,7 +344,7 @@ function abrirFicha(id) {
     <div class="fotos">${fotos}</div>
     <p class="texto-ficha">${n.texto}</p>
     <hr class="separador">
-    <div class="contacto"><div class="contacto-icono">☏</div><div><div class="contacto-titulo">Contacto</div><div class="contacto-detalle">${n.contacto}</div><div class="nota">El contacto real se agregará al confirmar los datos del comercio.</div></div></div>
+    <div class="contacto"><div class="contacto-icono">☏</div><div><div class="contacto-titulo">Contacto</div><div class="contacto-detalle">${n.contacto}</div>${n.whatsapp ? `<a class="boton-whatsapp" href="https://wa.me/${n.whatsapp}" target="_blank" rel="noopener">Escribir por WhatsApp</a>` : `<div class="nota">El contacto real se agregará al confirmar los datos del comercio.</div>`}</div></div>
     <div class="contacto"><div class="contacto-icono">⌖</div><div><div class="contacto-titulo">Ubicación</div><div class="contacto-detalle">${n.ubicacion}</div></div></div>`;
 
   mostrarPantalla("ficha");
@@ -335,11 +356,11 @@ document.querySelectorAll("[data-ficha]").forEach(boton => {
 
 // Servicios
 const categorias = {
-  "Bordados": ["chisla"],
+  "Bordados": ["quechisla"],
   "Taller de costura": [],
-  "Sublimación": ["andy"],
+  "Sublimación": [],
   "Etiquetas": [],
-  "Plotter y vinilo": [],
+  "Plotter y vinilo": ["ploteo"],
   "Planchado textil": []
 };
 
