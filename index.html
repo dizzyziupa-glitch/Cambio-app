@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CAMBIO | Tu dinero más fácil</title>
+<meta name="theme-color" content="#17452F">
+<link rel="icon" type="image/svg+xml" href="icon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="manifest.json">
+<style>
+:root{--crema:#F5EBD5;--crema2:#EFE4C9;--verde:#17452F;--verde2:#28583E;--amarillo:#E5C64F;--texto:#20352A;--suave:#58675B;--linea:#D8CCB1}
+*{box-sizing:border-box}
+body{margin:0;background:#E8E5DC;color:var(--texto);font-family:Arial,Helvetica,sans-serif}
+button,input{font:inherit}
+button{cursor:pointer}
+.app{width:min(100%,520px);min-height:100vh;margin:auto;padding:18px 16px 24px;background:var(--crema)}
+.oculto{display:none!important}
+.encabezado{display:flex;align-items:center;gap:12px;margin-bottom:18px}
+.billetera{display:grid;place-items:center;width:52px;height:52px;flex-shrink:0;border-radius:15px;background:var(--amarillo);color:var(--verde);font-size:27px}
+.marca{color:var(--verde);font-size:23px;font-weight:850}
+.subtitulo{margin-top:4px;color:var(--suave);font-size:14px}
+.boton-icono{display:grid;place-items:center;width:44px;height:44px;margin-left:auto;border:0;border-radius:50%;background:var(--verde);color:#fff;font-size:24px}
+h1,h2,h3,p{margin-top:0}
+h1{margin-bottom:7px;color:var(--verde);font-size:22px}
+h2{margin-bottom:6px;color:var(--verde);font-size:19px}
+h3{margin-bottom:4px;color:var(--verde);font-size:16px}
+p{line-height:1.45}
+.suave{color:var(--suave);font-size:14px}
+.hero{margin-bottom:15px;padding:17px 16px;border-radius:18px;background:var(--crema2)}
+.etiqueta{display:block;margin-bottom:7px;color:var(--verde);font-size:14px;font-weight:700}
+.monedas{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0 16px}
+.moneda{position:relative;display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 6px;border:1px solid var(--linea);border-radius:12px;background:#fff;font-size:30px;line-height:1.1}
+.nombre-pais{color:var(--verde);font-size:15px;font-weight:800}
+.moneda.activa .nombre-pais{color:#fff}
+.moneda.activa{border-color:var(--verde);background:var(--verde);box-shadow:inset 0 0 0 2px var(--amarillo)}
+.moneda.activa::after{position:absolute;top:5px;right:7px;color:var(--amarillo);content:"✓";font-size:14px}
+.importe{width:100%;padding:14px 13px;border:1px solid var(--linea);border-radius:12px;background:#fff;color:var(--verde);font-size:22px;font-weight:750}
+.aclaracion{margin-top:6px;color:var(--suave);font-size:14px}
+.calcular{display:flex;width:100%;align-items:center;justify-content:center;gap:10px;margin:14px 0 18px;padding:17px;border:0;border-radius:13px;background:var(--verde);color:#fff;font-size:16px;font-weight:850}
+.titulo-seccion{margin:12px 0 10px;color:var(--verde);font-size:18px;font-weight:800}
+.cotizaciones{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.cotizacion{min-width:0;padding:12px;border:1px solid #E3D9C4;border-radius:14px;background:#fff}
+.cotizacion-nombre{margin-bottom:6px;color:var(--verde);font-size:14px;font-weight:800}
+.cotizacion-tipo{min-height:30px;color:var(--suave);font-size:14px}
+.cotizacion-valor{margin:6px 0;color:var(--verde);font-size:21px;font-weight:850}
+.actualizado{color:var(--suave);font-size:14px;line-height:1.45}
+.fuente{margin-top:5px;color:#8A7650;font-size:14px}
+.informacion{display:flex;gap:9px;align-items:flex-start;margin-top:14px;padding:12px;border:1px solid #E3D9C4;border-radius:13px;background:#fff}
+.informacion h3{margin-bottom:4px;font-size:14px}
+.informacion p{margin-bottom:0;color:var(--suave);font-size:14px}
+.publicidad-inicio,.publicidad-directorio{margin-top:14px;padding:16px;border-radius:16px;background:var(--verde);color:#fff}
+.publicidad-inicio p,.publicidad-directorio p{margin-bottom:0;color:#E9E6D8;font-size:14px}
+.llamado-texto{margin-top:11px;color:var(--amarillo);font-weight:850}
+.llamado{display:block;margin-top:11px;padding:0;border:0;background:transparent;color:var(--amarillo);font-weight:850;text-align:left}
+.boton-secundario{width:100%;margin-top:12px;padding:13px;border:1px solid var(--verde);border-radius:11px;background:#fff;color:var(--verde);font-weight:750}
+.hero-directorio{margin-bottom:18px;padding:18px;border-radius:17px;background:var(--verde);color:#fff}
+.hero-directorio h1{color:#fff}
+.hero-directorio p{margin-bottom:0;color:#E9E6D8;font-size:14px}
+.lista-negocios{display:grid;gap:10px;margin-bottom:19px}
+.negocio{display:flex;width:100%;align-items:center;gap:12px;padding:12px;border:1px solid #E3D9C4;border-radius:15px;background:#fff;text-align:left}
+.miniatura{display:grid;width:72px;height:72px;flex-shrink:0;place-items:center;border-radius:11px;background:#E8E4D8;color:var(--verde);font-size:30px}
+.descripcion-negocio{margin-top:4px;color:var(--suave);font-size:14px;line-height:1.35}
+.flecha{margin-left:auto;color:var(--verde);font-size:23px}
+.servicios{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:18px}
+.servicio{display:flex;min-height:90px;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:13px 9px;border:1px solid #E3D9C4;border-radius:14px;background:#fff;color:var(--verde);font-size:14px;font-weight:750;text-align:center}
+.servicio.activo{border-color:var(--verde);background:var(--verde);color:#fff}
+.resultado-servicio{margin:-6px 0 18px;padding:12px;border-radius:12px;background:#fff;color:var(--suave);font-size:14px}
+.publicidad-directorio h2{color:#fff}
+.boton-amarillo{width:100%;margin-top:13px;padding:13px;border:0;border-radius:11px;background:var(--amarillo);color:var(--verde);font-weight:850}
+.detalle-publicidad{margin-top:12px;padding:12px;border-radius:11px;background:var(--verde2);color:#fff;font-size:14px}
+.ficha{padding:14px;border:1px solid #E3D9C4;border-radius:16px;background:#fff}
+.nombre-ficha{margin-bottom:4px;color:var(--verde);font-size:24px;font-weight:850}
+.fotos{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:12px 0}
+.foto{display:grid;min-height:110px;aspect-ratio:4/3;place-items:center;overflow:hidden;border-radius:10px;background:#E8E4D8;color:var(--suave);text-align:center;font-size:14px}
+.miniatura{overflow:hidden}
+.miniatura img{width:100%;height:100%;object-fit:cover}
+.fotos .foto:first-child:nth-last-child(3){grid-column:1/-1;aspect-ratio:1/1}
+.foto img{width:100%;height:100%;object-fit:cover}
+.texto-ficha{margin:9px 0 12px;color:var(--verde);font-size:14px;line-height:1.45}
+.separador{border:0;border-top:1px solid var(--linea)}
+.contacto{display:flex;align-items:flex-start;gap:11px;padding:10px 0}
+.contacto-icono{width:28px;flex-shrink:0;font-size:23px;text-align:center}
+.contacto-titulo{margin-bottom:3px;color:var(--verde);font-size:14px;font-weight:800}
+.contacto-detalle{color:var(--suave);font-size:14px}
+.boton-whatsapp{display:inline-block;margin-top:8px;padding:11px 16px;border-radius:11px;background:#25D366;color:#fff;font-weight:850;font-size:14px;text-decoration:none}
+.opciones{display:grid;gap:10px;margin:10px 0 18px}
+.opcion{display:flex;align-items:center;gap:12px;width:100%;min-height:58px;padding:0 14px;border:1px solid var(--linea);border-radius:14px;background:#fff;color:var(--verde);font-size:17px;font-weight:750;text-align:left}
+.opcion .ok{display:grid;place-items:center;width:26px;height:26px;flex-shrink:0;border:2px solid var(--linea);border-radius:50%;color:transparent;font-size:14px;font-weight:900}
+.opcion.activa{border-color:var(--verde);background:var(--verde);color:#fff;box-shadow:inset 0 0 0 2px var(--amarillo)}
+.opcion.activa .ok{border-color:var(--amarillo);background:var(--amarillo);color:var(--verde)}
+.libre{padding:3px 9px;border-radius:20px;background:var(--amarillo);color:var(--verde);font-size:14px;font-weight:800}
+.proximamente{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:12px;padding:14px;border:2px dashed var(--linea);border-radius:13px;background:var(--crema2);color:var(--verde)}
+.proximamente p{margin:4px 0 0;color:var(--suave);font-size:14px}
+.etiqueta-pronto{flex-shrink:0;padding:6px 10px;border-radius:20px;background:var(--amarillo);color:var(--verde);font-size:14px;font-weight:850}
+.negocio.vacio{border:2px dashed var(--verde);background:var(--crema2);color:inherit;text-decoration:none}
+.nota{margin-top:10px;color:#8A7650;font-size:14px}
+.pie{margin-top:17px;color:#7B806F;font-size:14px;text-align:center}
+@media(min-width:560px){body{padding:20px 0}.app{min-height:calc(100vh - 40px);border-radius:22px}}
+#splash{position:fixed;inset:0;z-index:999;display:flex;flex-direction:column;align-items:center;padding-top:max(31vh,64px);background:linear-gradient(180deg,#F5EBD5 0%,#F5EBD5 42%,#EFD98A 100%);transition:opacity .5s ease;cursor:pointer;overflow:hidden}
+#splash.sale{opacity:0;pointer-events:none}
+.splash-marca{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;gap:10px;animation:sube .8s ease both}
+.splash-billetera{display:grid;place-items:center;width:84px;height:84px;border-radius:24px;background:var(--amarillo);color:var(--verde)}
+.splash-nombre{color:var(--verde);font-size:52px;font-weight:900;letter-spacing:3px}
+.splash-lema{color:var(--suave);font-size:18px}
+.splash-paisaje{position:absolute;left:0;right:0;bottom:12px;width:100%;height:auto;max-height:50vh;animation:sube 1s .2s ease both}
+.splash-banda{position:absolute;left:0;right:0;bottom:0;display:flex;height:12px}
+.splash-banda i{flex:1}
+@keyframes sube{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){.splash-marca,.splash-paisaje{animation:none}}
+</style>
+</head>
+<body>
+<div id="splash" role="img" aria-label="CAMBIO, tu dinero más fácil">
+  <div class="splash-marca"><div class="splash-billetera"><svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 7V5.5A1.5 1.5 0 0 0 17.5 4H5a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2H5"/><circle cx="16.5" cy="13" r="1.2" fill="currentColor"/></svg></div><div class="splash-nombre">CAMBIO</div><div class="splash-lema">Tu dinero más fácil</div></div>
+  <svg class="splash-paisaje" viewBox="0 0 390 300" preserveAspectRatio="xMidYMax meet" aria-hidden="true">
+<path d="M0 270L40 236 70 256 110 218 150 250 195 204 240 246 285 208 330 252 390 226V300H0Z" fill="#28583E" fill-opacity=".45"/>
+<g transform="translate(195 172)" fill="none" stroke="#F5EBD5" stroke-width="1.6" stroke-linecap="round"><circle r="84" fill="#E5C64F" fill-opacity=".75"/><circle r="66"/><circle r="48"/><circle r="30"/><circle r="12"/><path d="M12.0 0.0L84.0 0.0"/><circle cx="66.0" cy="0.0" r="2.6" fill="#F5EBD5" stroke="none"/><circle cx="48.0" cy="0.0" r="2.6" fill="#F5EBD5" stroke="none"/><circle cx="30.0" cy="0.0" r="2.6" fill="#F5EBD5" stroke="none"/><circle cx="82.4" cy="16.4" r="6"/><path d="M11.1 4.6L77.6 32.1"/><circle cx="61.0" cy="25.3" r="2.6" fill="#F5EBD5" stroke="none"/><circle cx="44.3" cy="18.4" r="2.6" fill="#F5EBD5" stroke="none"/><circle cx="27.7" cy="11.5" r="2.6" fill="#F5EBD5" stroke="none"/><circle cx="69.8" cy="46.7" r="6"/><path d="M8.5 8.5L59.4 59.4"/><circle cx="46.7" cy="46.7" r="2.6" fill="#F5EBD5" stroke="none"/><circle cx="33.9" cy="33.9" r="2.6" fill="#F5EBD5" stroke="none"/><circle cx="21.2" cy="21.2" r="2.6" fill="#F5EBD5" stroke="none"/><circle cx="46.7" cy="69.8" r="6"/><path d="M4.6 11.1L32.1 77.6"/><circle cx="25.3" cy="61.0" r="2.6" fill="#F5EBD5" stroke="none"/><circle cx="18.4" cy="44.3" r="2.6" fill="#F5EBD5" stroke="none"/><circle cx="11.5" cy="27.7" r="2.6" fill="#F5EBD5" stroke="none"/><circle cx="16.4" cy="82.4" r="6"/><path d="M0.0 12.0L0.0 84.0"/><circle cx="0.0" cy="66.0" r="2.6" fill="#F5EBD5" stroke="none"/><circle cx="0.0" cy="48.0" r="2.6" fill="#F5EBD5" stroke="none"/><circle cx="0.0" cy="30.0" r="2.6" fill="#F5EBD5" stroke="none"/><circle cx="-16.4" cy="82.4" r="6"/><path d="M-4.6 11.1L-32.1 77.6"/><circle cx="-25.3" cy="61.0" r="2.6" fill="#F5EBD5" stroke="none"/><circle cx="-18.4" cy="44.3" r="2.6" fill="#F5EBD5" stroke="none"/><circle cx="-11.5" cy="27.7" r="2.6" fill="#F5EBD5" stroke="none"/><circle cx="-46.7" cy="69.8" r="6"/><path d="M-8.5 8.5L-59.4 59.4"/><circle cx="-46.7" cy="46.7" r="2.6" fill="#F5EBD5" stroke="none"/><circle cx="-33.9" cy="33.9" r="2.6" fill="#F5EBD5" stroke="none"/><circle cx="-21.2" cy="21.2" r="2.6" fill="#F5EBD5" stroke="none"/><circle cx="-69.8" cy="46.7" r="6"/><path d="M-11.1 4.6L-77.6 32.1"/><circle cx="-61.0" cy="25.3" r="2.6" fill="#F5EBD5" stroke="none"/><circle cx="-44.3" cy="18.4" r="2.6" fill="#F5EBD5" stroke="none"/><circle cx="-27.7" cy="11.5" r="2.6" fill="#F5EBD5" stroke="none"/><circle cx="-82.4" cy="16.4" r="6"/><path d="M-12.0 0.0L-84.0 0.0"/><circle cx="-66.0" cy="0.0" r="2.6" fill="#F5EBD5" stroke="none"/><circle cx="-48.0" cy="0.0" r="2.6" fill="#F5EBD5" stroke="none"/><circle cx="-30.0" cy="0.0" r="2.6" fill="#F5EBD5" stroke="none"/><circle cx="-82.4" cy="-16.4" r="6"/><path d="M-11.1 -4.6L-77.6 -32.1"/><circle cx="-61.0" cy="-25.3" r="2.6" fill="#F5EBD5" stroke="none"/><circle cx="-44.3" cy="-18.4" r="2.6" fill="#F5EBD5" stroke="none"/><circle cx="-27.7" cy="-11.5" r="2.6" fill="#F5EBD5" stroke="none"/><circle cx="-69.8" cy="-46.7" r="6"/><path d="M-8.5 -8.5L-59.4 -59.4"/><circle cx="-46.7" cy="-46.7" r="2.6" fill="#F5EBD5" stroke="none"/><circle cx="-33.9" cy="-33.9" r="2.6" fill="#F5EBD5" stroke="none"/><circle cx="-21.2" cy="-21.2" r="2.6" fill="#F5EBD5" stroke="none"/><circle cx="-46.7" cy="-69.8" r="6"/><path d="M-4.6 -11.1L-32.1 -77.6"/><circle cx="-25.3" cy="-61.0" r="2.6" fill="#F5EBD5" stroke="none"/><circle cx="-18.4" cy="-44.3" r="2.6" fill="#F5EBD5" stroke="none"/><circle cx="-11.5" cy="-27.7" r="2.6" fill="#F5EBD5" stroke="none"/><circle cx="-16.4" cy="-82.4" r="6"/><path d="M-0.0 -12.0L-0.0 -84.0"/><circle cx="-0.0" cy="-66.0" r="2.6" fill="#F5EBD5" stroke="none"/><circle cx="-0.0" cy="-48.0" r="2.6" fill="#F5EBD5" stroke="none"/><circle cx="-0.0" cy="-30.0" r="2.6" fill="#F5EBD5" stroke="none"/><circle cx="16.4" cy="-82.4" r="6"/><path d="M4.6 -11.1L32.1 -77.6"/><circle cx="25.3" cy="-61.0" r="2.6" fill="#F5EBD5" stroke="none"/><circle cx="18.4" cy="-44.3" r="2.6" fill="#F5EBD5" stroke="none"/><circle cx="11.5" cy="-27.7" r="2.6" fill="#F5EBD5" stroke="none"/><circle cx="46.7" cy="-69.8" r="6"/><path d="M8.5 -8.5L59.4 -59.4"/><circle cx="46.7" cy="-46.7" r="2.6" fill="#F5EBD5" stroke="none"/><circle cx="33.9" cy="-33.9" r="2.6" fill="#F5EBD5" stroke="none"/><circle cx="21.2" cy="-21.2" r="2.6" fill="#F5EBD5" stroke="none"/><circle cx="69.8" cy="-46.7" r="6"/><path d="M11.1 -4.6L77.6 -32.1"/><circle cx="61.0" cy="-25.3" r="2.6" fill="#F5EBD5" stroke="none"/><circle cx="44.3" cy="-18.4" r="2.6" fill="#F5EBD5" stroke="none"/><circle cx="27.7" cy="-11.5" r="2.6" fill="#F5EBD5" stroke="none"/><circle cx="82.4" cy="-16.4" r="6"/></g>
+<g fill="#17452F">
+<path d="M-20 300V270Q22 241 80 233Q136 241 172 274V300Z"/>
+<g transform="translate(80 238) scale(1.2) translate(-75 -238)" stroke="#17452F" stroke-width=".6" stroke-linejoin="round"><ellipse cx="75" cy="233" rx="25" ry="5" fill="#F5EBD5"/><path d="M67 171Q75 168 83 171L86 200 88 232H62L64 200Z" fill="#F5EBD5"/><path d="M66 171L33 176Q29 177 29 180L35 184 66 186Z" fill="#F5EBD5"/><path d="M84 171L117 176Q121 177 121 180L115 184 84 186Z" fill="#F5EBD5"/><path d="M66.3 171.4Q75 168.6 83.7 171.4L83.7 185.6H66.3Z" fill="#F5EBD5" stroke="none"/><path d="M79 172L83 171 86 200 88 232H79Q81 200 79 172Z" fill="#17452F"/><path d="M35 184L66 186 66 182 37 181ZM115 184L84 186 84 182 113 181Z" fill="#17452F"/><ellipse cx="28" cy="179" rx="3.6" ry="1.8" fill="#F5EBD5" transform="rotate(-25 28 179)"/><ellipse cx="122" cy="179" rx="3.6" ry="1.8" fill="#F5EBD5" transform="rotate(25 122 179)"/><path d="M70.5 159Q70 151.5 75 151Q80 151.5 79.5 159L82 171Q75 173 68 171Z" fill="#17452F" stroke="none"/><ellipse cx="75" cy="159.5" rx="3" ry="4.2" fill="#F5EBD5" stroke="none"/><path d="M72.2 162Q75 172.5 77.8 162Q75 164.4 72.2 162Z" fill="#17452F" stroke="none"/><path d="M72 176V232M76 178Q75.4 205 77 232" fill="none" stroke-width=".5"/></g>
+<path d="M150 300C160 250 175 190 192 135C197 120 203 120 207 135C222 190 238 250 250 300Z"/>
+<path d="M250 300V272H266V262H284V254H304V246H326V300Z"/>
+<path d="M336 300L341 168 345 148 349 168 354 300Z"/><rect x="331" y="288" width="28" height="12"/><path d="M0 297Q100 286 195 292T390 288V300H0Z"/><g transform="translate(262 18)"><ellipse cx="30" cy="224" rx="11" ry="6.5"/><path d="M21 226h2.4v10H21zM25.5 226h2.4v10h-2.4zM33 226h2.4v10H33zM37.5 226h2.4v10h-2.4z"/><path d="M36 221L40 205 44 206 41 224Z"/><ellipse cx="44.5" cy="204" rx="4.2" ry="2.8" transform="rotate(-15 44.5 204)"/><path d="M42 202L41 196.5 44.5 201ZM45.5 201L46.5 196 48 201Z"/><ellipse cx="19" cy="221" rx="2.2" ry="1.6"/></g>
+</g>
+<path d="M250 272H266M266 262H284M284 254H304M304 246H326" stroke="#F5EBD5" stroke-opacity=".4" stroke-width="1.4"/>
+</svg>
+  <div class="splash-banda"><i style="background:#D52B1E"></i><i style="background:#F9E300"></i><i style="background:#007934"></i><i style="background:#D91023"></i><i style="background:#FFFFFF"></i><i style="background:#D91023"></i><i style="background:#75AADB"></i><i style="background:#FFFFFF"></i><i style="background:#75AADB"></i><i style="background:#D52B1E"></i><i style="background:#FFFFFF"></i><i style="background:#0038A8"></i></div>
+</div>
+<script>
+(function(){
+  var sp=document.getElementById("splash"),visto=false;
+  try{visto=sessionStorage.getItem("splashVisto")==="1"}catch(e){}
+  if(visto){sp.remove();return}
+  try{sessionStorage.setItem("splashVisto","1")}catch(e){}
+  function cerrar(){sp.classList.add("sale");setTimeout(function(){sp.remove()},500)}
+  sp.addEventListener("click",cerrar);
+  setTimeout(cerrar,2800);
+})();
+</script>
+<main class="app">
+
+<section id="inicio">
+  <header class="encabezado">
+    <div class="billetera" aria-hidden="true"><svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 7V5.5A1.5 1.5 0 0 0 17.5 4H5a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2H5"/><circle cx="16.5" cy="13" r="1.2" fill="currentColor"/></svg></div>
+    <div><div class="marca">CAMBIO</div><div class="subtitulo">Tu dinero más fácil</div></div>
+  </header>
+
+  <div class="hero">
+    <h1>Calcula tu platita</h1>
+    <p class="suave">Cambia pesos argentinos a la moneda de tu país, o al revés.</p>
+  </div>
+
+  <label class="etiqueta">Elige tu moneda</label>
+  <div class="monedas">
+    <button type="button" class="moneda activa" data-moneda="BOB" aria-label="Bolivianos" aria-pressed="true">🇧🇴<span class="nombre-pais">Bolivia</span></button>
+    <button type="button" class="moneda" data-moneda="PEN" aria-label="Soles peruanos" aria-pressed="false">🇵🇪<span class="nombre-pais">Perú</span></button>
+    <button type="button" class="moneda" data-moneda="PYG" aria-label="Guaraníes paraguayos" aria-pressed="false">🇵🇾<span class="nombre-pais">Paraguay</span></button>
+  </div>
+
+  <label class="etiqueta">¿Qué plata tienes?</label>
+  <div class="opciones">
+    <button type="button" class="opcion activa" id="opcionPesos" aria-pressed="true"><span class="ok">✓</span><span>Tengo pesos argentinos</span></button>
+    <button type="button" class="opcion" id="opcionOtra" aria-pressed="false"><span class="ok">✓</span><span id="textoOtraMoneda">Tengo bolivianos</span></button>
+  </div>
+
+  <label class="etiqueta" for="importe" id="preguntaImporte">¿Cuántos pesos argentinos quieres cambiar?</label>
+  <input id="importe" class="importe" type="number" min="1" step="any" value="10000">
+  <div class="aclaracion" id="aclaracionImporte">Pesos argentinos (ARS)</div>
+  <button type="button" class="calcular" id="calcular">▦ &nbsp; CALCULAR</button>
+
+  <div id="avisoCalculo" class="informacion oculto" aria-live="polite"></div>
+
+  <div class="publicidad-inicio">
+    <strong>Publicidad de tiendas y comercios textiles</strong>
+    <p>Encuentra servicios de nuestra comunidad.</p>
+    <button type="button" class="boton-amarillo" id="abrirDirectorio">📍 Tiendas por tu zona →</button>
+    <div class="llamado-texto">¡Publica tu negocio con CAMBIO!</div>
+    <p style="margin-top:8px">Dale visibilidad a tu comercio y conecta con nuestra comunidad.</p>
+  </div>
+  <div class="titulo-seccion">Cotizaciones de referencia</div>
+  <div class="cotizaciones">
+    <article class="cotizacion"><div class="cotizacion-nombre">🇦🇷 Argentina</div><div class="cotizacion-tipo">Dólar blue</div><div class="cotizacion-valor" id="val-ARS">$1.540</div><div class="actualizado" id="est-ARS">Valor de ejemplo</div><div class="fuente" id="fuente-ARS">Cotización ilustrativa</div></article>
+    <article class="cotizacion"><div class="cotizacion-nombre">🇧🇴 Bolivia</div><div class="cotizacion-tipo">Dólar paralelo</div><div class="cotizacion-valor" id="val-BOB">Bs 11,85</div><div class="actualizado" id="est-BOB">Valor de ejemplo</div><div class="fuente" id="fuente-BOB">Cotización ilustrativa</div></article>
+    <article class="cotizacion"><div class="cotizacion-nombre">🇵🇪 Perú</div><div class="cotizacion-tipo">Dólar / sol</div><div class="cotizacion-valor" id="val-PEN">S/ 3,44</div><div class="actualizado" id="est-PEN">Valor de ejemplo</div><div class="fuente" id="fuente-PEN">Cotización ilustrativa</div></article>
+    <article class="cotizacion"><div class="cotizacion-nombre">🇵🇾 Paraguay</div><div class="cotizacion-tipo">Dólar / guaraní</div><div class="cotizacion-valor" id="val-PYG">₲ 5.721</div><div class="actualizado" id="est-PYG">Valor de ejemplo</div><div class="fuente" id="fuente-PYG">Cotización ilustrativa</div></article>
+  </div>
+
+  <div class="informacion"><div>💡</div><div><h3>Información transparente</h3><p>CAMBIO utiliza cotizaciones de referencia. Los valores pueden diferir de los tipos de cambio reales.</p></div></div>
+
+  <div class="proximamente"><div><strong>EnvíosFácil</strong><p>Pronto vas a poder enviar plata a tu familia desde aquí.</p></div><span class="etiqueta-pronto">Próximamente</span></div>
+  <div class="pie">Versión 1.0.0 · Creador: Shamir A.</div>
+</section>
+
+<section id="directorio" class="oculto">
+  <header class="encabezado">
+    <div class="billetera" aria-hidden="true"><svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 7V5.5A1.5 1.5 0 0 0 17.5 4H5a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2H5"/><circle cx="16.5" cy="13" r="1.2" fill="currentColor"/></svg></div>
+    <div><div class="marca">CAMBIO</div><div class="subtitulo">Negocios de nuestra comunidad</div></div>
+    <button type="button" class="boton-icono" id="volverInicio" aria-label="Volver al inicio"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-8 9 8M5 10v10h14V10M10 20v-6h4v6"/></svg></button>
+  </header>
+
+  <div class="hero-directorio"><h1>Negocios destacados</h1><p>Emprendimientos textiles de Villa Celina y alrededores.</p></div>
+  <div class="titulo-seccion">Comercios destacados</div>
+
+  <div class="lista-negocios" id="listaNegocios">
+    <button type="button" class="negocio" data-ficha="maya"><div class="miniatura"><img src="maya-maquina.jpg" alt=""></div><div><h3>Bordados Maya</h3><div class="descripcion-negocio">Bordados de todo tipo: logos, escudos y diseños propios.</div></div><span class="flecha">›</span></button>
+    <button type="button" class="negocio" data-ficha="ploteo"><div class="miniatura">▤</div><div><h3>Ploteo y Vinilo</h3><div class="descripcion-negocio">Corte de vinilo con tu logo, texto o diseño.</div></div><span class="flecha">›</span></button>
+    <a class="negocio vacio" href="https://wa.me/5491165647600?text=Hola%2C%20quiero%20publicitar%20mi%20negocio%20en%20CAMBIO" target="_blank" rel="noopener"><div class="miniatura">＋</div><div><h3>Tu negocio aquí</h3><div class="descripcion-negocio">Escríbenos por WhatsApp y publica tu comercio.</div></div><span class="flecha">›</span></a>
+  </div>
+
+  <div class="titulo-seccion">Busca un servicio</div>
+  <p class="suave">Elige el trabajo textil que necesitas.</p>
+  <div class="servicios">
+    <button type="button" class="servicio" data-servicio="Bordados">✂<br>Bordados</button>
+    <button type="button" class="servicio" data-servicio="Ploteo y vinilo">▤<br>Ploteo y vinilo</button>
+    <button type="button" class="servicio" data-servicio="Taller de costura">♧<br>Taller de costura<span class="libre">Disponible</span></button>
+    <button type="button" class="servicio" data-servicio="Sublimación">▧<br>Sublimación<span class="libre">Disponible</span></button>
+    <button type="button" class="servicio" data-servicio="Etiquetas">▱<br>Etiquetas<span class="libre">Disponible</span></button>
+    <button type="button" class="servicio" data-servicio="Planchado textil">▣<br>Planchado textil<span class="libre">Disponible</span></button>
+  </div>
+  <div id="resultadoServicio" class="resultado-servicio oculto" aria-live="polite"></div>
+
+  <div class="publicidad-directorio">
+    <h2>¿Tienes un emprendimiento?</h2><p>Dale visibilidad a tu negocio y conecta con nuestra comunidad.</p>
+    <button type="button" class="boton-amarillo" id="mostrarPublicidad">¡Publica tu negocio!</button>
+    <div id="detallePublicidad" class="detalle-publicidad oculto">En una próxima etapa, podrás enviar los datos de tu comercio para solicitar su publicación en CAMBIO.</div>
+  </div>
+  <div class="pie">Versión 1.0.0 · Creador: Shamir A.</div>
+</section>
+
+<section id="ficha" class="oculto">
+  <header class="encabezado">
+    <button type="button" class="boton-icono" id="volverDirectorio" aria-label="Volver al directorio" style="margin-left:0"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg></button>
+    <div><div class="marca">CAMBIO</div><div class="subtitulo">Ficha del comercio</div></div>
+  </header>
+  <article class="ficha" id="contenidoFicha"></article>
+  <div class="pie">Versión 1.0.0 · Creador: Shamir A.</div>
+</section>
+
+</main>
+
+<script>
+const pantallas = {
+  inicio: document.getElementById("inicio"),
+  directorio: document.getElementById("directorio"),
+  ficha: document.getElementById("ficha")
+};
+
+function mostrarPantalla(nombre) {
+  Object.entries(pantallas).forEach(([clave, elemento]) => {
+    elemento.classList.toggle("oculto", clave !== nombre);
+  });
+  window.scrollTo(0, 0);
+}
+
+// Quita el filtro de servicios y muestra todos los negocios otra vez.
+function reiniciarFiltro() {
+  document.querySelectorAll("[data-ficha]").forEach(t => t.classList.remove("oculto"));
+  document.querySelectorAll("[data-servicio]").forEach(s => {
+    s.classList.remove("activo");
+    s.setAttribute("aria-pressed", "false");
+  });
+  document.getElementById("resultadoServicio").classList.add("oculto");
+}
+
+// Navegación
+document.getElementById("abrirDirectorio").addEventListener("click", () => mostrarPantalla("directorio"));
+document.getElementById("volverInicio").addEventListener("click", () => {
+  reiniciarFiltro();
+  mostrarPantalla("inicio");
+});
+document.getElementById("volverDirectorio").addEventListener("click", () => {
+  reiniciarFiltro();
+  mostrarPantalla("directorio");
+});
+document.getElementById("mostrarPublicidad").addEventListener("click", () => {
+  window.open("https://wa.me/5491165647600?text=Hola%2C%20quiero%20publicitar%20mi%20negocio%20en%20CAMBIO", "_blank", "noopener");
+});
+
+// Calculadora
+let monedaSeleccionada = "BOB";
+let dolarArg = 1540;
+let tengoOtra = false;
+let cotizacionesVivas = false;
+const tasas = {
+  BOB: {nombre: "bolivianos", simbolo: "Bs", porDolar: 11.85, decimales: 2},
+  PEN: {nombre: "soles peruanos", simbolo: "S/", porDolar: 3.44, decimales: 2},
+  PYG: {nombre: "guaraníes paraguayos", simbolo: "₲", porDolar: 5721, decimales: 0}
+};
+const banderas = {BOB: "🇧🇴", PEN: "🇵🇪", PYG: "🇵🇾"};
+
+document.querySelectorAll("[data-moneda]").forEach(boton => {
+  boton.addEventListener("click", () => {
+    monedaSeleccionada = boton.dataset.moneda;
+    document.querySelectorAll("[data-moneda]").forEach(item => {
+      const activa = item.dataset.moneda === monedaSeleccionada;
+      item.classList.toggle("activa", activa);
+      item.setAttribute("aria-pressed", String(activa));
+    });
+    actualizarOpciones();
+  });
+});
+
+function actualizarOpciones() {
+  const d = tasas[monedaSeleccionada];
+  document.getElementById("textoOtraMoneda").textContent = "Tengo " + d.nombre;
+  document.getElementById("opcionPesos").classList.toggle("activa", !tengoOtra);
+  document.getElementById("opcionOtra").classList.toggle("activa", tengoOtra);
+  document.getElementById("opcionPesos").setAttribute("aria-pressed", String(!tengoOtra));
+  document.getElementById("opcionOtra").setAttribute("aria-pressed", String(tengoOtra));
+  const nombre = tengoOtra ? d.nombre : "pesos argentinos";
+  document.getElementById("preguntaImporte").textContent = "¿Cuántos " + nombre + " quieres cambiar?";
+  document.getElementById("aclaracionImporte").textContent = tengoOtra
+    ? d.nombre.charAt(0).toUpperCase() + d.nombre.slice(1) + " (" + monedaSeleccionada + ")"
+    : "Pesos argentinos (ARS)";
+  document.getElementById("avisoCalculo").classList.add("oculto");
+}
+
+document.getElementById("opcionPesos").addEventListener("click", () => { tengoOtra = false; actualizarOpciones(); });
+document.getElementById("opcionOtra").addEventListener("click", () => { tengoOtra = true; actualizarOpciones(); });
+
+function calcular() {
+  const campo = document.getElementById("importe");
+  const importe = Number(campo.value);
+  const aviso = document.getElementById("avisoCalculo");
+
+  if (!campo.value.trim() || !Number.isFinite(importe) || importe <= 0) {
+    aviso.innerHTML = "<div>ℹ️</div><div><h3>Revisa el importe</h3><p>Escribe una cantidad mayor que cero.</p></div>";
+    aviso.classList.remove("oculto");
+    campo.focus();
+    return;
+  }
+
+  const destino = tasas[monedaSeleccionada];
+  const dePesos = !tengoOtra;
+  const resultado = dePesos ? importe / dolarArg * destino.porDolar : importe / destino.porDolar * dolarArg;
+  const decimales = dePesos ? destino.decimales : 0;
+  const simbolo = dePesos ? destino.simbolo : "$";
+  const nombreOrigen = dePesos ? "pesos argentinos" : destino.nombre;
+  const nombreDestino = dePesos ? destino.nombre : "pesos argentinos";
+  const formatoResultado = new Intl.NumberFormat("es-AR", {minimumFractionDigits: decimales, maximumFractionDigits: decimales}).format(resultado);
+  const formatoImporte = new Intl.NumberFormat("es-AR", {maximumFractionDigits: 2}).format(importe);
+
+  aviso.innerHTML = `
+    <div style="font-size:24px">${banderas[monedaSeleccionada]}</div>
+    <div>
+      <h3>Resultado del cambio</h3>
+      <p>Con ${cotizacionesVivas ? "la cotización de hoy" : "la cotización de referencia"}, si cambias ${formatoImporte} ${nombreOrigen} recibes:</p>
+      <div style="font-size:25px;font-weight:850;color:#17452F;margin:8px 0">${simbolo} ${formatoResultado}</div>
+      <p>En ${nombreDestino}.</p>
+      <p style="font-size:14px">${cotizacionesVivas ? "El valor final puede variar un poco en la casa de cambio." : "No se pudieron actualizar las cotizaciones; el valor es de referencia."}</p>
+    </div>`;
+  aviso.classList.remove("oculto");
+  aviso.scrollIntoView({behavior: "smooth", block: "center"});
+}
+
+async function cargarCotizaciones() {
+  try {
+    const r = await fetch("/api/cotizaciones");
+    if (!r.ok) throw new Error("sin conexión");
+    const d = await r.json();
+    const fmt = (n, dec) => new Intl.NumberFormat("es-AR", {minimumFractionDigits: dec, maximumFractionDigits: dec}).format(n);
+    const hora = new Date(d.actualizado).toLocaleString("es-AR", {day: "numeric", month: "short", hour: "2-digit", minute: "2-digit"});
+    const textos = {ARS: n => "$" + fmt(n, 0), BOB: n => "Bs " + fmt(n, 2), PEN: n => "S/ " + fmt(n, 2), PYG: n => "₲ " + fmt(n, 0)};
+    ["ARS", "BOB", "PEN", "PYG"].forEach(cod => {
+      const c = d[cod];
+      if (!c || !Number.isFinite(c.valor) || c.valor <= 0) return;
+      if (cod === "ARS") dolarArg = c.valor; else tasas[cod].porDolar = c.valor;
+      document.getElementById("val-" + cod).textContent = textos[cod](c.valor);
+      document.getElementById("est-" + cod).textContent = "Actualizado: " + hora;
+      document.getElementById("fuente-" + cod).textContent = c.fuente;
+      cotizacionesVivas = true;
+    });
+  } catch (e) {
+    /* Si falla, la app sigue con los valores de ejemplo */
+  }
+}
+actualizarOpciones();
+cargarCotizaciones();
+
+document.getElementById("calcular").addEventListener("click", calcular);
+document.getElementById("importe").addEventListener("keydown", e => {
+  if (e.key === "Enter") calcular();
+});
+
+// Negocios
+const negocios = {
+  maya: {
+    nombre: "Bordados Maya",
+    descripcion: "Bordados de todo tipo.",
+    fotos: ["maya-1.jpg", "maya-2.jpg", "maya-3.jpg"],
+    texto: "Bordamos logos, escudos y diseños propios. También contamos con diseñador.",
+    contacto: "WhatsApp: 11 6564-7600",
+    whatsapp: "5491165647600",
+    ubicacion: "Villa Celina"
+  },
+  ploteo: {
+    nombre: "Ploteo y Vinilo",
+    descripcion: "Corte de vinilo con tu logo, texto o diseño.",
+    fotos: [],
+    texto: "Cortamos vinilo con tu logo, palabras o diseño. Tenemos diseñador. Puedes traer tu vinilo o usar el nuestro (con costo extra).",
+    contacto: "WhatsApp: 11 6564-9282",
+    whatsapp: "5491165649282",
+    ubicacion: "Villa Celina"
+  }
+};
+
+function abrirFicha(id) {
+  const n = negocios[id];
+  if (!n) return;
+
+  const fotos = !n.fotos.length ? '<div class="foto">Foto próximamente</div><div class="foto">Foto próximamente</div>' : n.fotos.map((url, i) => `
+    <div class="foto">
+      <img src="${url}" alt="Trabajo ${i + 1} de ${n.nombre}" loading="lazy"
+        onerror="this.style.display='none';this.parentElement.textContent='Foto no disponible';">
+    </div>`).join("");
+
+  document.getElementById("contenidoFicha").innerHTML = `
+    <div class="nombre-ficha">${n.nombre}</div>
+    <p class="suave">${n.descripcion}</p>
+    <div class="fotos">${fotos}</div>
+    <p class="texto-ficha">${n.texto}</p>
+    <hr class="separador">
+    <div class="contacto"><div class="contacto-icono">☏</div><div><div class="contacto-titulo">Contacto</div><div class="contacto-detalle">${n.contacto}</div>${n.whatsapp ? `<a class="boton-whatsapp" href="https://wa.me/${n.whatsapp}" target="_blank" rel="noopener">Escribir por WhatsApp</a>` : `<div class="nota">El contacto real se agregará al confirmar los datos del comercio.</div>`}</div></div>
+    <div class="contacto"><div class="contacto-icono">⌖</div><div><div class="contacto-titulo">Zona</div><div class="contacto-detalle">${n.ubicacion}</div></div></div>`;
+
+  mostrarPantalla("ficha");
+}
+
+document.querySelectorAll("[data-ficha]").forEach(boton => {
+  boton.addEventListener("click", () => abrirFicha(boton.dataset.ficha));
+});
+
+// Servicios
+const categorias = {
+  "Bordados": ["maya"],
+  "Taller de costura": [],
+  "Sublimación": [],
+  "Etiquetas": [],
+  "Ploteo y vinilo": ["ploteo"],
+  "Planchado textil": []
+};
+
+document.querySelectorAll("[data-servicio]").forEach(boton => {
+  boton.addEventListener("click", () => {
+    const servicio = boton.dataset.servicio;
+    const coincidencias = categorias[servicio] || [];
+    document.querySelectorAll("[data-servicio]").forEach(item => {
+      item.classList.toggle("activo", item === boton);
+      item.setAttribute("aria-pressed", String(item === boton));
+    });
+    document.querySelectorAll("[data-ficha]").forEach(tarjeta => {
+      tarjeta.classList.toggle("oculto", !coincidencias.includes(tarjeta.dataset.ficha));
+    });
+
+    const resultado = document.getElementById("resultadoServicio");
+    const mensaje = encodeURIComponent("Hola, quiero publicitar mi negocio de " + servicio + " en CAMBIO");
+    resultado.innerHTML = coincidencias.length
+      ? `Comercios de ${servicio}. Toca una tarjeta para abrir su ficha.`
+      : `Este espacio está disponible para tu negocio de ${servicio}.<br><a class="boton-whatsapp" href="https://wa.me/5491165647600?text=${mensaje}" target="_blank" rel="noopener">Quiero publicar aquí</a>`;
+    resultado.classList.remove("oculto");
+  });
+});
+</script>
+</body>
+</html>
