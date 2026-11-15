@@ -307,6 +307,22 @@ a.boton-amarillo{display:block;box-sizing:border-box;text-align:center;text-deco
 .j-pasos li:not(:last-child)::after{position:absolute;left:16px;top:36px;bottom:-12px;width:2px;background:var(--linea);content:""}
 .j-fila .j-chiste{margin:0!important;padding:12px 16px!important;border:0!important;background:#FFF3C4;color:var(--verde);font-size:17px;font-weight:600}
 .j-accion,.j-otra{margin-top:4px}
+
+/* Comparación: dólar blue y USDT */
+.informacion.resultado-doble{display:block;padding:14px;border:0;border-radius:16px;background:var(--crema2)}
+.res-encabezado{display:flex;align-items:center;gap:8px;margin-bottom:12px;color:var(--verde);font-size:16px;font-weight:700;line-height:1.35}
+.res-cajas{display:grid;gap:10px}
+.res-caja{position:relative;padding:14px 16px;border:2px solid var(--linea);border-radius:14px;background:#fff}
+.res-caja.gana{border-color:var(--verde);background:var(--verde);color:#fff}
+.res-sello{display:inline-block;margin-bottom:6px;padding:3px 10px;border-radius:999px;background:var(--amarillo);color:var(--verde);font-size:14px;font-weight:700}
+.res-caja-titulo{font-size:17px;font-weight:700}
+.res-caja.gana .res-caja-titulo{color:var(--amarillo)}
+.res-caja-monto{margin:4px 0 2px;font-size:32px;font-weight:700;line-height:1.1;overflow-wrap:anywhere}
+.res-caja-sub{color:var(--suave);font-size:14px}
+.res-caja.gana .res-caja-sub{color:#E9E6D8}
+.res-caja-vacia{border-style:dashed;background:transparent}
+.res-diferencia{margin:12px 0 4px;color:var(--verde);font-size:17px}
+.res-nota{margin:0;color:var(--suave);font-size:14px}
 /* ===== CAMBIO estilo 2.0 (pantalla calculadora) ===== */
 :root{--papel:#FBF6EA;--oro:#C9A227;--tinta:#13241B}
 body{font-family:"Lexend",Verdana,Tahoma,sans-serif;background:#E6E1D3}
@@ -647,6 +663,11 @@ function calcular() {
   const formatoResultado = new Intl.NumberFormat("es-AR", {minimumFractionDigits: decimales, maximumFractionDigits: decimales}).format(resultado);
   const formatoImporte = new Intl.NumberFormat("es-AR", {maximumFractionDigits: 2}).format(importe);
 
+  if (modo === "pesos") {
+    mostrarComparacion({importe, dePesos, resultado, decimales, simbolo, nombreOrigen, nombreDestino, formatoImporte});
+    return;
+  }
+  aviso.classList.remove("resultado-doble");
   aviso.classList.add("resultado-ok");
   aviso.innerHTML = `
       <div class="res-titulo"><span style="font-size:22px">${dePesos ? banderas[monedaSeleccionada] : (modo === "dolar" ? "🇺🇸" : "🇦🇷")}</span> Recibes</div>
@@ -657,6 +678,48 @@ function calcular() {
   aviso.scrollIntoView({behavior: "smooth", block: "center"});
 }
 
+// Pesos ⇄ moneda del país: muestra "Por dólar blue" y "Por USDT" para comparar
+function mostrarComparacion(r) {
+  const aviso = document.getElementById("avisoCalculo");
+  const cod = monedaSeleccionada;
+  const fmt = n => new Intl.NumberFormat("es-AR", {minimumFractionDigits: r.decimales, maximumFractionDigits: r.decimales}).format(n);
+  const fmtCorto = n => new Intl.NumberFormat("es-AR", {maximumFractionDigits: r.decimales === 0 ? 0 : 2}).format(n);
+  let porUsdt = null;
+  const u = usdtP2P;
+  if (u && u.ARS && u[cod]) {
+    // Pesos → país: compras USDT con pesos y los vendes en el país. Al revés, lo contrario.
+    porUsdt = r.dePesos
+      ? r.importe / u.ARS.compra * u[cod].venta
+      : r.importe / u[cod].compra * u.ARS.venta;
+  }
+  const ganaUsdt = porUsdt !== null && porUsdt > r.resultado;
+  const caja = (titulo, sub, valor, gana) => `
+    <div class="res-caja${gana ? " gana" : ""}">
+      ${gana ? `<span class="res-sello">✓ Aquí llega más</span>` : ""}
+      <div class="res-caja-titulo">${titulo}</div>
+      <div class="res-caja-monto">${valor}</div>
+      <div class="res-caja-sub">${sub}</div>
+    </div>`;
+  const blue = caja("Por dólar blue", cotizacionesVivas ? "Casa de cambio, valor de hoy" : "Valor de referencia", `${r.simbolo} ${fmt(r.resultado)}`, porUsdt !== null && !ganaUsdt);
+  const usdt = porUsdt !== null
+    ? caja("Por USDT", "Binance P2P, valor de hoy", `${r.simbolo} ${fmt(porUsdt)}`, ganaUsdt)
+    : `<div class="res-caja res-caja-vacia"><div class="res-caja-titulo">Por USDT</div><div class="res-caja-sub">Ahora no pudimos leer el precio del USDT. Prueba en un ratito.</div></div>`;
+  let diferencia = "";
+  if (porUsdt !== null) {
+    const dif = Math.abs(porUsdt - r.resultado);
+    diferencia = `<p class="res-diferencia">Por ${ganaUsdt ? "USDT" : "dólar blue"} llegan <strong>${r.simbolo} ${fmtCorto(dif)} más</strong>.</p>`;
+  }
+  aviso.classList.remove("resultado-ok");
+  aviso.classList.add("resultado-doble");
+  aviso.innerHTML = `
+    <div class="res-encabezado"><span style="font-size:22px">${r.dePesos ? banderas[cod] : "🇦🇷"}</span> Si cambias ${r.formatoImporte} ${r.nombreOrigen}, recibes en ${r.nombreDestino}:</div>
+    <div class="res-cajas">${blue}${usdt}</div>
+    ${diferencia}
+    <p class="res-nota">Sin contar la comisión de la casa de cambio o de envío. El valor final puede variar un poco.</p>`;
+  aviso.classList.remove("oculto");
+  aviso.scrollIntoView({behavior: "smooth", block: "center"});
+}
+let usdtP2P = null; // {ARS:{compra,venta}, BOB:..., PEN:..., PYG:...}
 async function cargarCotizaciones() {
   try {
     const r = await fetch("/api/cotizaciones");
@@ -674,6 +737,7 @@ async function cargarCotizaciones() {
       document.getElementById("fuente-" + cod).textContent = c.fuente;
       cotizacionesVivas = true;
     });
+    if (d.USDT && d.USDT.ARS) usdtP2P = d.USDT;
   } catch (e) {
     /* Si falla, la app sigue con los valores de ejemplo */
   }
@@ -985,48 +1049,55 @@ pintarCartelera();
 // ================= JUANCITO, el ayudante de CAMBIO =================
 const JUANCITO_TEMAS = [
   {id: "calc", icono: "💱", nombre: "La calculadora", preguntas: [
-    {p: "¿Cómo sé cuánta platita me dan?", pasos: ["Arriba, toca \"Pesos argentinos\".", "Toca la bandera de tu país.", "Toca qué platita tienes: \"Tengo pesos argentinos\" o \"Tengo bolivianos\" (o soles, o guaraníes).", "Escribe cuánta platita quieres cambiar.", "Toca el botón verde \"Calcular\".", "En el cuadro verde dice cuánta platita recibes."], chiste: "¡Listo, caserito/a! Ya sabes usar la calculadora. Ahora nadie te va a hacer el cuento del tío. 😄"},
+    {p: "¿Cómo sé cuánta platita me dan?", pasos: ["Arriba, toca \"Pesos argentinos\".", "Toca la bandera de tu país.", "Toca qué platita tienes: \"Tengo pesos argentinos\" o \"Tengo bolivianos\" (o soles, o guaraníes).", "Escribe cuánta platita quieres cambiar.", "Toca el botón verde \"Calcular\".", "En el cuadro verde dice cuánta platita recibes."], chiste: "¡Listo, case! Ya sabes usar la calculadora. Ahora nadie te va a hacer el cuento del tío. 😄"},
     {p: "¿Cómo cambio de país?", pasos: ["Toca la bandera del país que quieres: Bolivia, Perú o Paraguay.", "La bandera elegida se pone verde.", "CAMBIO se acuerda de tu país para la próxima vez."], chiste: "Así de fácil, sin pasaporte ni nada. 😉"},
-    {p: "¿Por qué en la casa de cambio me dieron otra cantidad?", texto: ["CAMBIO te muestra el valor del día para que tengas una idea antes de ir.", "Cada casa de cambio pone su propio precio, y puede darte un poquito más o un poquito menos."], chiste: "Por eso conviene preguntar en dos o tres casas, caserito/a. ¡La platita no crece en los árboles!"},
+    {p: "¿Por qué en la casa de cambio me dieron otra cantidad?", texto: ["CAMBIO te muestra el valor del día para que tengas una idea antes de ir.", "Cada casa de cambio pone su propio precio, y puede darte un poquito más o un poquito menos."], chiste: "Por eso conviene preguntar en dos o tres casas, case. ¡La platita no crece en los árboles!"},
     {p: "¿De cuándo es el valor?", texto: ["Baja hasta \"Cotizaciones\". Ahí dice la fecha y la hora en que se actualizó.", "Se actualiza todos los días."], chiste: "Más fresquito que el pan de la mañana. 🍞"},
-    {p: "Escribí mal la cantidad, ¿qué hago?", pasos: ["Toca la cantidad que escribiste.", "Bórrala con la tecla de borrar del teclado.", "Escribe la cantidad correcta.", "Toca \"Calcular\" otra vez."], chiste: "Tranquilo/a, caserito/a, hasta yo me equivoco de vez en cuando… bueno, casi nunca. Bueno, una vez me puse el chulito al revés. 😅"}
+    {p: "Escribí mal la cantidad, ¿qué hago?", pasos: ["Toca la cantidad que escribiste.", "Bórrala con la tecla de borrar del teclado.", "Escribe la cantidad correcta.", "Toca \"Calcular\" otra vez."], chiste: "No pasa nada, case, hasta yo me equivoco de vez en cuando… bueno, casi nunca. Bueno, una vez me puse el chulito al revés. 😅"}
   ]},
   {id: "dolar", icono: "💵", nombre: "Dólares", preguntas: [
-    {p: "¿Cuánto me dan por mis dólares?", pasos: ["Arriba de la calculadora, toca \"Dólares\".", "Toca la bandera del país: Argentina, Bolivia, Perú o Paraguay.", "Toca \"Tengo dólares\".", "Escribe cuántos dólares tienes.", "Toca \"Calcular\"."], chiste: "¡Mira tú, caserito/a, con dólares y todo! 💵"},
+    {p: "¿Cuánto me dan por mis dólares?", pasos: ["Arriba de la calculadora, toca \"Dólares\".", "Toca la bandera del país: Argentina, Bolivia, Perú o Paraguay.", "Toca \"Tengo dólares\".", "Escribe cuántos dólares tienes.", "Toca \"Calcular\"."], chiste: "¡Mira tú, case, con dólares y todo! 💵"},
     {p: "¿Cuántos dólares me dan por mi platita?", pasos: ["Toca \"Dólares\" arriba de la calculadora.", "Toca la bandera de tu país.", "Toca \"Tengo pesos argentinos\" (o bolivianos, soles, guaraníes).", "Escribe cuánta platita tienes.", "Toca \"Calcular\"."], chiste: "Ahorrando en dólares, como la abuelita bajo el colchón. 😄"},
     {p: "¿Qué dólar usa CAMBIO?", texto: ["En Argentina usamos el dólar blue. En Bolivia, el dólar paralelo. En Perú y Paraguay, el valor de referencia de cada país.", "Abajo, en \"Cotizaciones\", ves de dónde sale cada valor."]},
-    {p: "¿Por qué me pagan menos por mis dólares?", texto: ["Las casas de cambio tienen dos precios: uno para comprarte los dólares y otro para vendértelos.", "Cuando tú vendes tus dólares, te pagan un poquito menos que el precio de venta.", "CAMBIO te muestra un valor de referencia, para que tengas una idea."], chiste: "Así es el negocio, caserito/a. ¡Pregunta en varias casas antes de cambiar!"}
+    {p: "¿Por qué me pagan menos por mis dólares?", texto: ["Las casas de cambio tienen dos precios: uno para comprarte los dólares y otro para vendértelos.", "Cuando tú vendes tus dólares, te pagan un poquito menos que el precio de venta.", "CAMBIO te muestra un valor de referencia, para que tengas una idea."], chiste: "Así es el negocio, case. ¡Pregunta en varias casas antes de cambiar!"}
+  ]},
+  {id: "usdt", icono: "🪙", nombre: "Envío por USDT", preguntas: [
+    {p: "¿Qué es el USDT?", texto: ["Es un dólar digital: 1 USDT vale casi lo mismo que 1 dólar.", "Mucha gente lo usa para mandar platita a su país, con casas de envío o con Binance."], chiste: "Es un dólar que no se arruga en el bolsillo, case. 😄"},
+    {p: "¿Cómo veo cuánto llega por USDT?", pasos: ["Arriba, toca \"Pesos argentinos\".", "Toca la bandera de tu país.", "Toca qué platita tienes.", "Escribe cuánta platita quieres cambiar.", "Toca \"Calcular\".", "Vas a ver dos cuadros: \"Por dólar blue\" y \"Por USDT\"."], chiste: "¡Dos por el precio de uno, case! 😉"},
+    {p: "¿Cuál me conviene más?", texto: ["CAMBIO te marca con \"✓ Aquí llega más\" el camino donde recibes más platita.", "Abajo te dice cuánta platita más llega por ese camino.", "Recuerda que la casa de envío cobra su comisión, así que pregúntales cuánto te cobran."], chiste: "Así no te hacen el cuento del tío ni por blue ni por USDT. 😎"},
+    {p: "¿Por qué me llegó un poquito menos?", texto: ["Las casas de envío se quedan con una comisión.", "Además, el precio del USDT cambia durante el día.", "CAMBIO te muestra el valor sin comisión, para que tengas una idea."]},
+    {p: "¿Cómo me cuido al mandar por USDT?", pasos: ["Usa casas de envío conocidas o recomendadas por gente de confianza.", "Pide siempre tu comprobante.", "Nunca mandes platita a desconocidos que te escriben por redes o WhatsApp.", "Nunca compartas tus contraseñas ni los códigos que te llegan por mensaje.", "Si algo te parece raro, no mandes nada y avísanos."]}
   ]},
   {id: "negocios", icono: "🏪", nombre: "Buscar negocios", preguntas: [
     {p: "¿Cómo encuentro un bordador, un taller o una tienda?", pasos: ["En la pantalla principal, toca \"Tiendas por tu zona\".", "Baja hasta \"Busca por rubro\".", "Toca lo que buscas, por ejemplo \"Bordado\".", "Toca el negocio para ver sus fotos.", "Toca el botón verde de WhatsApp para escribirle."], chiste: "¡Más rápido que preguntar en toda la cuadra! 🏃"},
-    {p: "¿Qué quiere decir \"Verificado por CAMBIO\"?", texto: ["Que hablamos con el dueño y comprobamos que el negocio existe y trabaja de verdad."], chiste: "Lo revisamos con lupa, caserito/a. 🔍"},
+    {p: "¿Qué quiere decir \"Verificado por CAMBIO\"?", texto: ["Que hablamos con el dueño y comprobamos que el negocio existe y trabaja de verdad."], chiste: "Lo revisamos con lupa, case. 🔍"},
     {p: "¿En qué zonas está CAMBIO?", texto: ["Por ahora en Villa Celina y alrededores.", "Pronto vamos a llegar a más zonas."], chiste: "Paso a pasito, como la morenada. 💃"},
     {p: "Un negocio no me contesta, ¿qué hago?", texto: ["Espera un rato: a veces están trabajando y contestan más tarde.", "Si pasan varios días sin respuesta, avísanos por WhatsApp y lo revisamos."]},
-    {p: "No encuentro lo que busco, ¿qué hago?", texto: ["Escríbenos por WhatsApp y cuéntanos qué buscas.", "Así sabemos qué negocios sumar a CAMBIO."], chiste: "¡Tu pedido nos ayuda a crecer, caserito/a!"},
+    {p: "No encuentro lo que busco, ¿qué hago?", texto: ["Escríbenos por WhatsApp y cuéntanos qué buscas.", "Así sabemos qué negocios sumar a CAMBIO."], chiste: "¡Tu pedido nos ayuda a crecer, case!"},
     {p: "¿Cómo vuelvo atrás?", texto: ["Toca el botón \"Volver\" arriba a la izquierda.", "También puedes usar el botón de atrás de tu celular."], chiste: "Para atrás, ni para tomar impulso… ¡salvo en CAMBIO! 😄"}
   ]},
   {id: "trabajo", icono: "🙋", nombre: "Ofrecer mi trabajo", preguntas: [
-    {p: "¿Cómo me anoto para ofrecer mi trabajo?", pasos: ["Toca el botón \"Anotarme por WhatsApp\", aquí abajo.", "Se abre WhatsApp con un mensaje listo.", "Escribe tu nombre, tu oficio, tu zona y tu número.", "Toca enviar.", "Te llamamos para conocerte y después te publicamos."], boton: "anotarse", chiste: "¡Que te lluevan los trabajos, caserito/a! ☔"},
+    {p: "¿Cómo me anoto para ofrecer mi trabajo?", pasos: ["Toca el botón \"Anotarme por WhatsApp\", aquí abajo.", "Se abre WhatsApp con un mensaje listo.", "Escribe tu nombre, tu oficio, tu zona y tu número.", "Toca enviar.", "Te llamamos para conocerte y después te publicamos."], boton: "anotarse", chiste: "¡Que te lluevan los trabajos, case! ☔"},
     {p: "¿Cuánto cuesta anotarme?", texto: ["Nada. Anotarte en \"Busco trabajo\" es totalmente gratis."], boton: "anotarse", chiste: "Gratis, ni un pesito. ¡Palabra de Juancito! 🤝"},
     {p: "¿Qué datos tengo que mandar?", texto: ["Solo cuatro cositas: tu nombre, tu oficio (por ejemplo, rectista o bordador), tu zona y tu número de WhatsApp.", "No mandes fotos de tus documentos. No hacen falta."]},
     {p: "¿Quién se puede anotar?", texto: ["Cualquier persona mayor de 18 años que trabaje en el rubro textil."]},
     {p: "¿Cuánto tiempo sale mi aviso?", texto: ["La lista se actualiza todos los lunes.", "Si llegan avisos nuevos, salen los más antiguos para dar lugar a todos.", "Si quieres volver a salir, escríbenos otra vez."], chiste: "Así todos tienen su turno, como en la fila del pan. 🥖"},
-    {p: "¿Dónde veo mi aviso publicado?", pasos: ["En la pantalla principal, toca \"Tiendas por tu zona\".", "En \"Clasificados\", toca \"Busco trabajo\".", "Ahí estás tú, con tu oficio y tu WhatsApp."], chiste: "¡Ya eres famoso/a en la comunidad! ⭐"},
-    {p: "¿Cómo saco mi aviso?", texto: ["Escríbenos por WhatsApp y lo quitamos."], chiste: "¿Ya conseguiste trabajo? ¡Felicidades, caserito/a! 🎉"}
+    {p: "¿Dónde veo mi aviso publicado?", pasos: ["En la pantalla principal, toca \"Tiendas por tu zona\".", "En \"Clasificados\", toca \"Busco trabajo\".", "Ahí estás tú, con tu oficio y tu WhatsApp."], chiste: "¡Ya te conoce toda la comunidad! ⭐"},
+    {p: "¿Cómo saco mi aviso?", texto: ["Escríbenos por WhatsApp y lo quitamos."], chiste: "¿Ya conseguiste trabajo? ¡Felicidades, case! 🎉"}
   ]},
   {id: "clasificados", icono: "📋", nombre: "Clasificados (se busca, se vende)", preguntas: [
-    {p: "¿Cómo busco trabajo?", pasos: ["Entra a \"Tiendas por tu zona\".", "En \"Clasificados\", toca \"Se busca\".", "Ahí están los talleres que buscan personal.", "Toca una tirita de abajo del papel para escribirles por WhatsApp."], chiste: "¡Mucha suerte, caserito/a! Que te vaya bonito. 🍀"},
-    {p: "¿Cómo pongo un aviso para vender o alquilar una máquina?", pasos: ["Toca \"Pon tu aviso aquí\", al final de los Clasificados.", "Se abre WhatsApp con un mensaje listo.", "Completa qué es, el detalle, tu zona y tu número.", "Toca enviar. Lo revisamos y lo publicamos."], chiste: "Gratis, caserito/a. ¡Ni un pesito te cobro!"},
+    {p: "¿Cómo busco trabajo?", pasos: ["Entra a \"Tiendas por tu zona\".", "En \"Clasificados\", toca \"Se busca\".", "Ahí están los talleres que buscan personal.", "Toca una tirita de abajo del papel para escribirles por WhatsApp."], chiste: "¡Mucha suerte, case! Que te vaya bonito. 🍀"},
+    {p: "¿Cómo pongo un aviso para vender o alquilar una máquina?", pasos: ["Toca \"Pon tu aviso aquí\", al final de los Clasificados.", "Se abre WhatsApp con un mensaje listo.", "Completa qué es, el detalle, tu zona y tu número.", "Toca enviar. Lo revisamos y lo publicamos."], chiste: "Gratis, case. ¡Ni un pesito te cobro!"},
     {p: "¿Qué puedo publicar?", texto: ["Solo cosas del rubro textil: se busca personal, busco trabajo, se vende o se alquila una máquina, hilos o insumos.", "No publicamos casas ni otras cosas."]},
     {p: "¿Cuánto tarda en salir mi aviso y cuánto dura?", texto: ["Revisamos cada aviso y hablamos con la persona antes de publicarlo.", "Los avisos de \"Busco trabajo\" se actualizan los lunes.", "Para saber cuánto dura tu aviso, pregúntanos por WhatsApp."]},
-    {p: "¿Cómo saco mi aviso?", texto: ["Escríbenos por WhatsApp y lo quitamos."], chiste: "¿Ya vendiste? ¡Felicidades, caserito/a! 🎉"}
+    {p: "¿Cómo saco mi aviso?", texto: ["Escríbenos por WhatsApp y lo quitamos."], chiste: "¿Ya vendiste? ¡Felicidades, case! 🎉"}
   ]},
   {id: "comercio", icono: "💼", nombre: "Para comerciantes", preguntas: [
     {p: "¿Cómo publico mi negocio?", pasos: ["Mándanos por WhatsApp el nombre del negocio, qué haces y tu zona.", "Mándanos 2 o 3 fotos de tus trabajos.", "Te llamamos para conocerte.", "Lo publicamos con el sello \"Verificado por CAMBIO\"."], chiste: "¡Tu negocio en el bolsillo de toda la comunidad! 📱"},
-    {p: "¿Cuánto cuesta?", texto: ["Depende del lugar que elijas: destacado o en la lista de tu rubro.", "Escríbenos por WhatsApp y te explicamos los precios."], chiste: "Precios de paisano, caserito/a, no te asustes. 😉"},
+    {p: "¿Cuánto cuesta?", texto: ["Depende del lugar que elijas: destacado o en la lista de tu rubro.", "Escríbenos por WhatsApp y te explicamos los precios."], chiste: "Precios de paisano, case, no te asustes. 😉"},
     {p: "¿Qué diferencia hay entre \"Destacado\" y \"Rubro\"?", texto: ["\"Destacado\" es lo primero que ve la gente al entrar a los negocios.", "\"Rubro\" es cuando la persona toca, por ejemplo, \"Bordado\" y te encuentra en esa lista."], chiste: "Destacado es como estar en la primera fila de la fiesta. 🎺"},
     {p: "¿Cómo pago?", texto: ["Escríbenos por WhatsApp y te explicamos las formas de pago."]},
-    {p: "¿Puedo cambiar mis fotos o mis datos?", texto: ["Sí. Mándanos por WhatsApp las fotos o los datos nuevos y los cambiamos."], chiste: "¡Siempre bien presentable, caserito/a! 📸"}
+    {p: "¿Puedo cambiar mis fotos o mis datos?", texto: ["Sí. Mándanos por WhatsApp las fotos o los datos nuevos y los cambiamos."], chiste: "¡Siempre bien presentable, case! 📸"}
   ]},
   {id: "seguridad", icono: "🛡️", nombre: "Cuídate de estafas", preguntas: [
     {p: "¿Cómo compro una máquina usada sin que me estafen?", pasos: ["Nunca pagues antes de ver la máquina.", "Pide que la prendan y la hagan funcionar delante tuyo.", "Ve acompañado y de día.", "No entregues tus documentos.", "Si algo te parece raro, avísanos por WhatsApp."]},
@@ -1034,12 +1105,12 @@ const JUANCITO_TEMAS = [
     {p: "Vi un aviso raro o falso, ¿qué hago?", texto: ["No le mandes platita ni tus datos.", "Avísanos por WhatsApp y lo revisamos enseguida."]}
   ]},
   {id: "app", icono: "📱", nombre: "Sobre la app", preguntas: [
-    {p: "¿CAMBIO es gratis?", texto: ["Sí. Usar la calculadora, buscar negocios y poner avisos es gratis.", "Solo pagan los negocios que quieren aparecer en la app."], chiste: "Gratis, caserito/a, como el saludo de la vecina. 👋"},
+    {p: "¿CAMBIO es gratis?", texto: ["Sí. Usar la calculadora, buscar negocios y poner avisos es gratis.", "Solo pagan los negocios que quieren aparecer en la app."], chiste: "Gratis, case, como el saludo de la vecina. 👋"},
     {p: "¿Cómo pongo CAMBIO en mi pantalla?", pasos: ["En la pantalla principal, toca \"Instalar CAMBIO en tu teléfono\".", "Toca \"Instalar\" o \"Agregar\".", "Busca el ícono de CAMBIO en tu celular."], chiste: "¡Y ya me tienes siempre a mano! 🤗"},
     {p: "¿Cómo se la paso a un familiar?", pasos: ["En la pantalla principal, toca \"Compartir CAMBIO por WhatsApp\".", "Elige a quién mandársela.", "Toca enviar."], chiste: "Compartir es de buen paisano. 💚"},
-    {p: "¿Necesito internet?", texto: ["Sí. Para ver las cotizaciones del día y los negocios necesitas internet o datos.", "Pronto podrás usar la calculadora sin internet, con las últimas cotizaciones que se guardaron en tu celular.", "Pero ten cuidado: el dólar cambia todos los días. Te recomendamos abrir CAMBIO con internet para tener siempre el valor de hoy."], chiste: "¡No te quedes con el dólar de ayer, caserito/a! 😉"},
-    {p: "¿Qué es EnvíosFácil?", texto: ["Pronto podrás enviar tu platita a tu familia desde CAMBIO.", "Te vamos a avisar cuando esté listo."], chiste: "Estamos en eso, caserito/a. ¡Paciencia, que lo bueno se hace esperar!"},
-    {p: "¿Por qué me saludas en quechua, aymara o guaraní?", texto: ["Porque CAMBIO es de la comunidad, y queremos que te sientas en casa.", "El saludo cambia según tu país."], chiste: "¡Kamisaraki, caserito/a! ¿A que te sacó una sonrisa? 😊"},
+    {p: "¿Necesito internet?", texto: ["Sí. Para ver las cotizaciones del día y los negocios necesitas internet o datos.", "Pronto podrás usar la calculadora sin internet, con las últimas cotizaciones que se guardaron en tu celular.", "Pero ten cuidado: el dólar cambia todos los días. Te recomendamos abrir CAMBIO con internet para tener siempre el valor de hoy."], chiste: "¡No te quedes con el dólar de ayer, case! 😉"},
+    {p: "¿Qué es EnvíosFácil?", texto: ["Pronto podrás enviar tu platita a tu familia desde CAMBIO.", "Te vamos a avisar cuando esté listo."], chiste: "Estamos en eso, case. ¡Paciencia, que lo bueno se hace esperar!"},
+    {p: "¿Por qué me saludas en quechua, aymara o guaraní?", texto: ["Porque CAMBIO es de la comunidad, y queremos que te sientas en casa.", "El saludo cambia según tu país."], chiste: "¡Kamisaraki, case! ¿A que te sacó una sonrisa? 😊"},
     {p: "¿Mis datos están seguros?", texto: ["CAMBIO no te pide cuenta, ni contraseña, ni tu nombre.", "Solo guarda en tu celular el país que elegiste."]},
     {p: "¿Quién es Juancito?", texto: ["Soy el ayudante de CAMBIO. Estoy aquí para explicarte todo, paso a paso."], chiste: "Y sí, el chulito me lo tejió mi abuelita. 🧶"}
   ]}
@@ -1051,7 +1122,7 @@ const WA_SHA_AYUDA = "https://wa.me/5491165647600?text=" + encodeURIComponent("H
 let juancitoAbierto = false;
 
 function juancitoSaludo() {
-  return "¡Hola, caserito, caserita!";
+  return "¡Hola, case!";
 }
 function pintarJuancito(html, atras) {
   const cuerpo = document.getElementById("juancitoCuerpo");
