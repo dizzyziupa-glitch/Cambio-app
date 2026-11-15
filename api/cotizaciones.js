@@ -46,6 +46,13 @@ async function respaldo() {
   };
 }
 
+// USDT en Binance P2P (vía CriptoYa). compra = lo que pagas por 1 USDT; venta = lo que te pagan por 1 USDT.
+async function usdt(fiat) {
+  const j = await (await pedir("https://criptoya.com/api/binancep2p/USDT/" + fiat + "/100")).json();
+  if (!(j.ask > 0) || !(j.bid > 0)) throw new Error("sin precio");
+  return { compra: j.ask, venta: j.bid };
+}
+
 module.exports = async (req, res) => {
   const [a, b, c] = await Promise.allSettled([argentina(), bolivia(), bcp()]);
   const out = {
@@ -55,6 +62,10 @@ module.exports = async (req, res) => {
     PYG: c.status === "fulfilled" ? c.value.PYG : null,
     actualizado: new Date().toISOString()
   };
+  const monedas = ["ARS", "BOB", "PEN", "PYG"];
+  const u = await Promise.allSettled(monedas.map(usdt));
+  out.USDT = {};
+  monedas.forEach((m, i) => { out.USDT[m] = u[i].status === "fulfilled" ? u[i].value : null; });
   if (!out.PEN || !out.PYG) {
     try {
       const r = await respaldo();
