@@ -1056,6 +1056,10 @@ const JUANCITO_TEMAS = [
     {p: "¿De cuándo es el valor?", texto: ["Baja hasta \"Cotizaciones\". Ahí dice la fecha y la hora en que se actualizó.", "Se actualiza todos los días."], chiste: "Más fresquito que el pan de la mañana. 🍞"},
     {p: "Escribí mal la cantidad, ¿qué hago?", pasos: ["Toca la cantidad que escribiste.", "Bórrala con la tecla de borrar del teclado.", "Escribe la cantidad correcta.", "Toca \"Calcular\" otra vez."], chiste: "No pasa nada, case, hasta yo me equivoco de vez en cuando… bueno, casi nunca. Bueno, una vez me puse el chulito al revés. 😅"}
   ]},
+  {id: "envios", icono: "📦", nombre: "EnvíosFácil (muy pronto)", directo: true, preguntas: [
+    {p: "¿Qué es EnvíosFácil?", texto: ["Es el servicio que estamos preparando para que envíes tu platita de Argentina a Bolivia, Perú y Paraguay, y también al revés.", "Queremos que te cueste lo menos posible.", "Y que sea bien fácil: sin bajar otra aplicación, hablando con una persona por WhatsApp.", "Todavía no está funcionando. Si alguien te pide platita diciendo que es de CAMBIO, no se la mandes.", "¿Quieres que te avisemos cuando esté listo? Toca el botón de abajo y escríbenos por WhatsApp."], boton: "envios", chiste: "Estamos en eso, case. ¡Paciencia, que lo bueno se hace esperar!"},
+    {p: "¿Cuándo estará listo EnvíosFácil?", texto: ["Estamos trabajando en eso, case.", "Toca el botón de abajo y escríbenos por WhatsApp a qué país envías tu platita. Te avisamos apenas esté listo."], boton: "envios"}
+  ]},
   {id: "dolar", icono: "💵", nombre: "Dólares", preguntas: [
     {p: "¿Cuánto me dan por mis dólares?", pasos: ["Arriba de la calculadora, toca \"Dólares\".", "Toca la bandera del país: Argentina, Bolivia, Perú o Paraguay.", "Toca \"Tengo dólares\".", "Escribe cuántos dólares tienes.", "Toca \"Calcular\"."], chiste: "¡Mira tú, case, con dólares y todo! 💵"},
     {p: "¿Cuántos dólares me dan por mi platita?", pasos: ["Toca \"Dólares\" arriba de la calculadora.", "Toca la bandera de tu país.", "Toca \"Tengo pesos argentinos\" (o bolivianos, soles, guaraníes).", "Escribe cuánta platita tienes.", "Toca \"Calcular\"."], chiste: "Ahorrando en dólares, como la abuelita bajo el colchón. 😄"},
@@ -1110,8 +1114,6 @@ const JUANCITO_TEMAS = [
     {p: "¿Cómo pongo CAMBIO en mi pantalla?", pasos: ["En la pantalla principal, toca \"Instalar CAMBIO en tu teléfono\".", "Toca \"Instalar\" o \"Agregar\".", "Busca el ícono de CAMBIO en tu celular."], chiste: "¡Y ya me tienes siempre a mano! 🤗"},
     {p: "¿Cómo se la paso a un familiar?", pasos: ["En la pantalla principal, toca \"Compartir CAMBIO por WhatsApp\".", "Elige a quién mandársela.", "Toca enviar."], chiste: "Compartir es de buen paisano. 💚"},
     {p: "¿Necesito internet?", texto: ["Sí. Para ver las cotizaciones del día y los negocios necesitas internet o datos.", "Pronto podrás usar la calculadora sin internet, con las últimas cotizaciones que se guardaron en tu celular.", "Pero ten cuidado: el dólar cambia todos los días. Te recomendamos abrir CAMBIO con internet para tener siempre el valor de hoy."], chiste: "¡No te quedes con el dólar de ayer, case! 😉"},
-    {p: "¿Qué es EnvíosFácil?", texto: ["Pronto podrás enviar tu platita a tu familia desde CAMBIO.", "¿Quieres que te avisemos cuando esté listo? Toca el botón de abajo y escríbenos por WhatsApp."], boton: "envios", chiste: "Estamos en eso, case. ¡Paciencia, que lo bueno se hace esperar!"},
-    {p: "¿Cuándo estará listo EnvíosFácil?", texto: ["Estamos trabajando en eso, case.", "Toca el botón de abajo y escríbenos por WhatsApp a qué país envías tu platita. Te avisamos apenas esté listo."], boton: "envios"},
     {p: "¿Por qué me saludas en quechua, aymara o guaraní?", texto: ["Porque CAMBIO es de la comunidad, y queremos que te sientas en casa.", "El saludo cambia según tu país."], chiste: "¡Kamisaraki, case! ¿A que te sacó una sonrisa? 😊"},
     {p: "¿Mis datos están seguros?", texto: ["CAMBIO no te pide cuenta, ni contraseña, ni tu nombre.", "Solo guarda en tu celular el país que elegiste."]},
     {p: "¿Quién es Juancito?", texto: ["Soy el ayudante de CAMBIO. Estoy aquí para explicarte todo, paso a paso."], chiste: "Y sí, el chulito me lo tejió mi abuelita. 🧶"}
@@ -1134,6 +1136,7 @@ function pintarJuancito(html, atras) {
     const [tipo, a, c] = b.dataset.j.split(":");
     if (tipo === "inicio") juancitoInicio();
     if (tipo === "tema") juancitoTema(+a);
+    if (tipo === "lista") juancitoTema(+a, true);
     if (tipo === "resp") juancitoRespuesta(+a, +c);
   }));
 }
@@ -1144,8 +1147,9 @@ function juancitoInicio() {
   pintarJuancito(juancitoDice(`<strong>${juancitoSaludo()}</strong> Soy Juancito, el ayudante de CAMBIO. ¿En qué te ayudo? Toca un tema.`) +
     `<div class="j-temas">${JUANCITO_TEMAS.map((t, i) => `<button type="button" class="j-tema" data-j="tema:${i}"><span class="j-tema-icono">${t.icono}</span><span>${t.nombre}</span></button>`).join("")}</div>`);
 }
-function juancitoTema(i) {
+function juancitoTema(i, verLista) {
   const t = JUANCITO_TEMAS[i];
+  if (t.directo && !verLista) return juancitoRespuesta(i, 0);
   pintarJuancito(`<p class="j-yo">${t.icono} ${t.nombre}</p>` +
     juancitoDice(`Estas son las preguntas que más me hacen. ¿Cuál es la tuya?`) +
     `<div class="j-preguntas">${t.preguntas.map((q, k) => `<button type="button" class="j-pregunta" data-j="resp:${i}:${k}">${q.p}</button>`).join("")}</div>`, "inicio");
@@ -1159,7 +1163,7 @@ function juancitoRespuesta(i, k) {
     (q.chiste ? juancitoDice(q.chiste, "j-chiste") : "") +
     `${q.boton === "anotarse" ? `<a class="j-accion" href="${enlaceWA("Hola, quiero anotarme en Busco trabajo de CAMBIO.\nNombre:\nOficio:\nZona:\nWhatsApp:")}" target="_blank" rel="noopener">✍️ Anotarme por WhatsApp</a>` : ""}
     ${q.boton === "envios" ? `<a class="j-accion" href="${enlaceWA("Hola, quiero saber cuándo estará listo EnvíosFácil.\nYo envío a (Bolivia, Perú o Paraguay):")}" target="_blank" rel="noopener">🔔 Avísame cuando esté listo</a>` : ""}
-    <button type="button" class="j-otra" data-j="tema:${i}">Ver otra pregunta</button>`, "tema:" + i);
+    <button type="button" class="j-otra" data-j="${JUANCITO_TEMAS[i].directo ? "lista" : "tema"}:${i}">Ver otra pregunta</button>`, JUANCITO_TEMAS[i].directo ? "inicio" : "tema:" + i);
 }
 function juancitoSalta(el) {
   const ahora = Date.now();
